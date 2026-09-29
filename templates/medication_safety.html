@@ -1,0 +1,1435 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Medication Safety | AI in Pharmacy</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #0f172a;
+            color: #f8fafc;
+        }
+
+        .page {
+            min-height: 100vh;
+            padding: 32px 20px 50px;
+        }
+
+        .container {
+            width: min(1150px, 100%);
+            margin: auto;
+        }
+
+        /* =========================
+           BACK BUTTON
+        ========================= */
+
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            color: #93c5fd;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .back-button:hover {
+            color: #bfdbfe;
+        }
+
+        /* =========================
+           HEADER
+        ========================= */
+
+        .header {
+            background: #1e293b;
+            border: 1px solid #334155;
+            color: white;
+            border-radius: 24px;
+            padding: 38px 30px;
+            text-align: center;
+            margin-bottom: 25px;
+            box-shadow:
+                0 15px 35px
+                rgba(0,0,0,0.22);
+        }
+
+        .header-icon {
+            font-size: 42px;
+            margin-bottom: 8px;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 34px;
+        }
+
+        .header p {
+            margin: 10px 0 0;
+            color: rgba(255,255,255,0.85);
+            font-size: 16px;
+        }
+
+        /* =========================
+           MAIN GRID
+        ========================= */
+
+        .main-grid {
+            display: grid;
+            grid-template-columns:
+                minmax(0, 1.35fr)
+                minmax(300px, 0.65fr);
+            gap: 22px;
+            align-items: start;
+        }
+
+        /* =========================
+           CARDS
+        ========================= */
+
+        .card {
+            background: #1e293b;
+            border-radius: 20px;
+            padding: 26px;
+            box-shadow:
+                0 10px 30px
+                rgba(0,0,0,0.20);
+            border: 1px solid #334155;
+        }
+
+        .card-title {
+            margin: 0;
+            font-size: 23px;
+            color: #f8fafc;
+        }
+
+        .card-subtitle {
+            margin: 8px 0 24px;
+            color: #94a3b8;
+            line-height: 1.6;
+        }
+
+        /* =========================
+           FORM
+        ========================= */
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 14px;
+            font-weight: 700;
+            color: #e2e8f0;
+        }
+
+        .form-input {
+            width: 100%;
+            height: 52px;
+            padding: 0 15px;
+            border: 1px solid #334155;
+            border-radius: 11px;
+            background: #0f172a;
+            color: #f8fafc;
+            font-size: 15px;
+            outline: none;
+        }
+
+        .form-input:focus {
+            border-color: #2563eb;
+            background: #1e293b;
+            box-shadow:
+                0 0 0 3px
+                rgba(37,99,235,0.18);
+        }
+
+        /* =========================
+           BUTTON
+        ========================= */
+
+        .analyse-button {
+            width: 100%;
+            height: 54px;
+            border: none;
+            border-radius: 12px;
+            background: #2563eb;
+            color: white;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 5px;
+            box-shadow:
+                0 8px 20px
+                rgba(37,99,235,0.22);
+            transition: 0.2s ease;
+        }
+
+        .analyse-button:hover {
+            transform: translateY(-1px);
+            background: #1d4ed8;
+            box-shadow:
+                0 12px 25px
+                rgba(37,99,235,0.28);
+        }
+
+        /* =========================
+           INFORMATION CARD
+        ========================= */
+
+        .info-item {
+            display: flex;
+            gap: 14px;
+            margin-bottom: 22px;
+        }
+
+        .info-icon {
+            width: 42px;
+            height: 42px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+            background: #172554;
+            font-size: 21px;
+        }
+
+        .info-item h3 {
+            margin: 0 0 5px;
+            font-size: 15px;
+            color: #e2e8f0;
+        }
+
+        .info-item p {
+            margin: 0;
+            color: #94a3b8;
+            line-height: 1.5;
+            font-size: 14px;
+        }
+
+        /* =========================
+           LOADING
+        ========================= */
+
+        .loading {
+            display: none;
+            margin-top: 20px;
+            padding: 18px;
+            background: #172554;
+            border-radius: 12px;
+            color: #93c5fd;
+            text-align: center;
+            font-weight: 700;
+        }
+
+        /* =========================
+           ERROR
+        ========================= */
+
+        .error {
+            display: none;
+            margin-top: 20px;
+            padding: 15px;
+            background: #450a0a;
+            border: 1px solid #7f1d1d;
+            color: #fca5a5;
+            border-radius: 12px;
+            font-weight: 600;
+        }
+
+        /* =========================
+           RESULT
+        ========================= */
+
+        .result {
+            display: none;
+            margin-top: 22px;
+            border-radius: 18px;
+            overflow: hidden;
+            border: 1px solid #334155;
+            background: #1e293b;
+        }
+
+        .result-header {
+            padding: 22px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: #0f172a;
+        }
+
+        .result-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 25px;
+        }
+
+        .result-title-area {
+            flex: 1;
+        }
+
+        .result-title {
+            margin: 0;
+            font-size: 20px;
+            color: #f8fafc;
+        }
+
+        .result-source {
+            margin-top: 5px;
+            font-size: 12px;
+            color: #94a3b8;
+        }
+
+        /* =========================
+           STATUS COLORS
+        ========================= */
+
+        .status-warning .result-icon {
+            background: #422006;
+        }
+
+        .status-warning {
+            border-color: #f59e0b;
+        }
+
+        .status-danger .result-icon {
+            background: #450a0a;
+        }
+
+        .status-danger {
+            border-color: #ef4444;
+        }
+
+        .status-info .result-icon {
+            background: #172554;
+        }
+
+        .status-info {
+            border-color: #3b82f6;
+        }
+
+        .status-success .result-icon {
+            background: #052e16;
+        }
+
+        .status-success {
+            border-color: #22c55e;
+        }
+
+        /* =========================
+           RESULT BODY
+        ========================= */
+
+        .result-body {
+            padding: 22px;
+        }
+
+        .section-title {
+            margin: 0 0 9px;
+            font-size: 15px;
+            color: #e2e8f0;
+        }
+
+        .reason {
+            color: #cbd5e1;
+            line-height: 1.6;
+            margin-bottom: 18px;
+        }
+
+        /* =========================
+           PATIENT INFO
+        ========================= */
+
+        .patient-grid {
+            display: grid;
+            grid-template-columns:
+                repeat(3, minmax(0,1fr));
+            gap: 12px;
+            margin: 20px 0;
+        }
+
+        .patient-box {
+            background: #0f172a;
+            border: 1px solid #334155;
+            border-radius: 11px;
+            padding: 13px;
+        }
+
+        .patient-label {
+            display: block;
+            font-size: 11px;
+            color: #94a3b8;
+            text-transform: uppercase;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .patient-value {
+            display: block;
+            color: #e2e8f0;
+            font-weight: 700;
+            overflow-wrap: anywhere;
+        }
+
+        /* =========================
+           AGE NOTE
+        ========================= */
+
+        .age-note {
+            padding: 14px 16px;
+            background: #422006;
+            border: 1px solid #a16207;
+            color: #fbbf24;
+            border-radius: 11px;
+            margin-bottom: 20px;
+            line-height: 1.5;
+            font-size: 14px;
+        }
+
+        /* =========================
+           EVIDENCE
+        ========================= */
+
+        .evidence-box {
+            background: #0f172a;
+            border: 1px solid #334155;
+            border-radius: 12px;
+            padding: 16px;
+            margin-top: 15px;
+        }
+
+        .evidence-title {
+            margin: 0 0 10px;
+            color: #e2e8f0;
+            font-size: 15px;
+        }
+
+        .evidence-text {
+            max-height: 220px;
+            overflow-y: auto;
+            color: #cbd5e1;
+            font-size: 13px;
+            line-height: 1.6;
+            white-space: pre-wrap;
+        }
+
+        /* =========================
+           LABEL INFORMATION
+        ========================= */
+
+        .label-grid {
+            display: grid;
+            grid-template-columns:
+                repeat(2, minmax(0,1fr));
+            gap: 15px;
+            margin-top: 18px;
+        }
+
+        .label-card {
+            background: #0f172a;
+            border: 1px solid #334155;
+            border-radius: 12px;
+            padding: 15px;
+        }
+
+        .label-card h4 {
+            margin: 0 0 9px;
+            color: #93c5fd;
+            font-size: 14px;
+        }
+
+        .label-card p {
+            margin: 0;
+            color: #94a3b8;
+            font-size: 12px;
+            line-height: 1.5;
+            max-height: 130px;
+            overflow-y: auto;
+        }
+
+        /* =========================
+           FOOTER
+        ========================= */
+
+        .footer-note {
+            margin-top: 25px;
+            padding: 15px 18px;
+            border-radius: 12px;
+            background: #422006;
+            border: 1px solid #92400e;
+            color: #fdba74;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        /* =========================
+           MOBILE
+        ========================= */
+
+        @media (max-width: 850px) {
+
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+
+        }
+
+        @media (max-width: 600px) {
+
+            .page {
+                padding: 20px 14px 40px;
+            }
+
+            .header {
+                padding: 28px 18px;
+            }
+
+            .header h1 {
+                font-size: 28px;
+            }
+
+            .patient-grid,
+            .label-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .result-header {
+                align-items: flex-start;
+            }
+
+        }
+
+    </style>
+</head>
+
+<body>
+
+<div class="page">
+
+    <div class="container">
+
+        <a href="/" class="back-button">
+            ← Back to Dashboard
+        </a>
+
+        <div class="header">
+
+            <div class="header-icon">
+                💊
+            </div>
+
+            <h1>
+                Medication Safety
+            </h1>
+
+            <p>
+                AI-assisted medication interaction
+                and FDA label screening
+            </p>
+
+        </div>
+
+        <div class="main-grid">
+
+            <div>
+
+                <div class="card">
+
+                    <h2 class="card-title">
+                        🔎 Check Medication Safety
+                    </h2>
+
+                    <p class="card-subtitle">
+                        Enter two medicines and the
+                        patient's age for preliminary
+                        interaction screening.
+                    </p>
+
+                    <div class="form-group">
+
+                        <label class="form-label"
+                               for="medicine1">
+                            Medicine 1
+                        </label>
+
+                        <input
+                            id="medicine1"
+                            class="form-input"
+                            type="text"
+                            placeholder="e.g. Warfarin">
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label class="form-label"
+                               for="medicine2">
+                            Medicine 2
+                        </label>
+
+                        <input
+                            id="medicine2"
+                            class="form-input"
+                            type="text"
+                            placeholder="e.g. Aspirin">
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label class="form-label"
+                               for="age">
+                            Patient Age
+                        </label>
+
+                        <input
+                            id="age"
+                            class="form-input"
+                            type="number"
+                            min="1"
+                            max="120"
+                            placeholder="e.g. 65">
+
+                    </div>
+
+                    <button
+                        class="analyse-button"
+                        onclick="checkMedicationSafety()">
+
+                        🔍 Analyse Medication
+
+                    </button>
+
+                    <div
+                        id="loading"
+                        class="loading">
+
+                        🔄 Checking FDA drug-label
+                        information...
+
+                    </div>
+
+                    <div
+                        id="error"
+                        class="error">
+                    </div>
+
+                    <div
+                        id="result"
+                        class="result">
+
+                        <div
+                            id="resultHeader"
+                            class="result-header">
+
+                            <div
+                                id="resultIcon"
+                                class="result-icon">
+
+                                ⚠️
+
+                            </div>
+
+                            <div class="result-title-area">
+
+                                <h3
+                                    id="resultTitle"
+                                    class="result-title">
+
+                                    Result
+
+                                </h3>
+
+                                <div
+                                    class="result-source">
+
+                                    Source:
+                                    openFDA Drug Labeling API
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <div class="result-body">
+
+                            <h3 class="section-title">
+                                Analysis
+                            </h3>
+
+                            <div
+                                id="reason"
+                                class="reason">
+                            </div>
+
+                            <div
+                                id="ageNote"
+                                class="age-note">
+                            </div>
+
+                            <div class="patient-grid">
+
+                                <div class="patient-box">
+
+                                    <span class="patient-label">
+                                        Medicine 1
+                                    </span>
+
+                                    <span
+                                        id="resultMedicine1"
+                                        class="patient-value">
+                                    </span>
+
+                                </div>
+
+                                <div class="patient-box">
+
+                                    <span class="patient-label">
+                                        Medicine 2
+                                    </span>
+
+                                    <span
+                                        id="resultMedicine2"
+                                        class="patient-value">
+                                    </span>
+
+                                </div>
+
+                                <div class="patient-box">
+
+                                    <span class="patient-label">
+                                        Patient Age
+                                    </span>
+
+                                    <span
+                                        id="resultAge"
+                                        class="patient-value">
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+                            <div
+                                id="pairwiseEvidence"
+                                class="evidence-box"
+                                style="display:none;">
+
+                                <h4 class="evidence-title">
+                                    🔴 FDA Label Interaction Evidence
+                                </h4>
+
+                                <div
+                                    id="pairwiseText"
+                                    class="evidence-text">
+                                </div>
+
+                            </div>
+
+                            <div
+                                id="labelGrid"
+                                class="label-grid">
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="footer-note">
+
+                    ⚠️ <strong>Educational Prototype:</strong>
+                    This system provides preliminary
+                    interaction screening using
+                    publicly available FDA labeling data.
+                    It does not replace a doctor,
+                    pharmacist, or official medication
+                    reference.
+
+                </div>
+
+            </div>
+
+            <div class="card">
+
+                <h2 class="card-title">
+                    🛡️ Safety Information
+                </h2>
+
+                <div class="info-item">
+
+                    <div class="info-icon">
+                        🧬
+                    </div>
+
+                    <div>
+
+                        <h3>
+                            FDA Label Screening
+                        </h3>
+
+                        <p>
+                            The system retrieves
+                            medication information
+                            from the openFDA drug-label
+                            database.
+                        </p>
+
+                    </div>
+
+                </div>
+
+                <div class="info-item">
+
+                    <div class="info-icon">
+                        👤
+                    </div>
+
+                    <div>
+
+                        <h3>
+                            Patient Age
+                        </h3>
+
+                        <p>
+                            Age-related information
+                            is displayed for younger
+                            and older patients.
+                        </p>
+
+                    </div>
+
+                </div>
+
+                <div class="info-item">
+
+                    <div class="info-icon">
+                        ⚠️
+                    </div>
+
+                    <div>
+
+                        <h3>
+                            Professional Review
+                        </h3>
+
+                        <p>
+                            Always consult a qualified
+                            healthcare professional
+                            before making medication
+                            decisions.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+
+async function checkMedicationSafety() {
+
+    const medicine1 =
+        document
+        .getElementById("medicine1")
+        .value
+        .trim();
+
+    const medicine2 =
+        document
+        .getElementById("medicine2")
+        .value
+        .trim();
+
+    const age =
+        document
+        .getElementById("age")
+        .value;
+
+    const loading =
+        document
+        .getElementById("loading");
+
+    const error =
+        document
+        .getElementById("error");
+
+    const result =
+        document
+        .getElementById("result");
+
+
+    /* =========================
+       VALIDATION
+    ========================= */
+
+    if (!medicine1 || !medicine2 || !age) {
+
+        error.innerText =
+            "❌ Please enter both medicines and patient age.";
+
+        error.style.display = "block";
+
+        result.style.display = "none";
+
+        return;
+    }
+
+
+    /* =========================
+       LOADING
+    ========================= */
+
+    loading.style.display = "block";
+
+    error.style.display = "none";
+
+    result.style.display = "none";
+
+
+    try {
+
+        const response =
+            await fetch(
+                "/api/check-medications",
+                {
+
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body: JSON.stringify({
+
+                        medicine1:
+                            medicine1,
+
+                        medicine2:
+                            medicine2,
+
+                        age:
+                            Number(age)
+
+                    })
+
+                }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                data.error ||
+                "Unable to check medication information."
+            );
+
+        }
+
+
+        showMedicationResult(data);
+
+
+    }
+
+    catch (err) {
+
+        console.error(err);
+
+        error.innerText =
+            "❌ " + err.message;
+
+        error.style.display = "block";
+
+    }
+
+    finally {
+
+        loading.style.display = "none";
+
+    }
+
+}
+
+
+/* =====================================================
+   DISPLAY RESULT
+===================================================== */
+
+function showMedicationResult(data) {
+
+    const result =
+        document.getElementById(
+            "result"
+        );
+
+
+    const resultHeader =
+        document.getElementById(
+            "resultHeader"
+        );
+
+
+    const resultIcon =
+        document.getElementById(
+            "resultIcon"
+        );
+
+
+    const resultTitle =
+        document.getElementById(
+            "resultTitle"
+        );
+
+
+    const reason =
+        document.getElementById(
+            "reason"
+        );
+
+
+    const ageNote =
+        document.getElementById(
+            "ageNote"
+        );
+
+
+    const resultMedicine1 =
+        document.getElementById(
+            "resultMedicine1"
+        );
+
+
+    const resultMedicine2 =
+        document.getElementById(
+            "resultMedicine2"
+        );
+
+
+    const resultAge =
+        document.getElementById(
+            "resultAge"
+        );
+
+
+    /* -------------------------
+       CLEAR OLD STATUS
+    ------------------------- */
+
+    result.className = "result";
+
+    resultHeader.className =
+        "result-header";
+
+
+    /* -------------------------
+       STATUS
+    ------------------------- */
+
+    const status =
+        data.risk_status;
+
+
+    if (
+        status ===
+        "LABEL_INTERACTION_FOUND"
+    ) {
+
+        result.classList.add(
+            "status-danger"
+        );
+
+        resultIcon.innerText =
+            "🔴";
+
+    }
+
+    else if (
+        status ===
+        "NO_PAIRWISE_EVIDENCE"
+    ) {
+
+        result.classList.add(
+            "status-info"
+        );
+
+        resultIcon.innerText =
+            "🔵";
+
+    }
+
+    else if (
+        status ===
+        "DRUGS_NOT_FOUND" ||
+        status ===
+        "MEDICINE_1_NOT_FOUND" ||
+        status ===
+        "MEDICINE_2_NOT_FOUND"
+    ) {
+
+        result.classList.add(
+            "status-warning"
+        );
+
+        resultIcon.innerText =
+            "⚠️";
+
+    }
+
+    else {
+
+        result.classList.add(
+            "status-success"
+        );
+
+        resultIcon.innerText =
+            "🟢";
+
+    }
+
+
+    /* -------------------------
+       RESULT TEXT
+    ------------------------- */
+
+    resultTitle.innerText =
+        data.risk_title ||
+        "Medication Screening Result";
+
+
+    reason.innerText =
+        data.reason ||
+        "No additional information available.";
+
+
+    ageNote.innerText =
+        "👤 " +
+        (
+            data.age_note ||
+            "Age information unavailable."
+        );
+
+
+    resultMedicine1.innerText =
+        data.medicine1;
+
+
+    resultMedicine2.innerText =
+        data.medicine2;
+
+
+    resultAge.innerText =
+        data.age;
+
+
+    /* =================================================
+       PAIRWISE EVIDENCE
+    ================================================= */
+
+    const evidenceBox =
+        document.getElementById(
+            "pairwiseEvidence"
+        );
+
+
+    const evidenceText =
+        document.getElementById(
+            "pairwiseText"
+        );
+
+
+    if (
+        data.pairwise_evidence &&
+        data.pairwise_evidence.length > 0
+    ) {
+
+        evidenceBox.style.display =
+            "block";
+
+
+        evidenceText.innerHTML =
+            data.pairwise_evidence
+                .map(
+                    item =>
+                        `<div style="
+                            margin-bottom:14px;
+                            padding-bottom:14px;
+                            border-bottom:1px solid #334155;
+                        ">
+                            ${escapeHtml(item)}
+                        </div>`
+                )
+                .join("");
+
+    }
+
+    else {
+
+        evidenceBox.style.display =
+            "none";
+
+        evidenceText.innerHTML = "";
+
+    }
+
+
+    /* =================================================
+       LABEL INFORMATION
+    ================================================= */
+
+    const labelGrid =
+        document.getElementById(
+            "labelGrid"
+        );
+
+
+    labelGrid.innerHTML = "";
+
+
+    addLabelCard(
+        labelGrid,
+        data.medicine1,
+        data.medicine1_label
+    );
+
+
+    addLabelCard(
+        labelGrid,
+        data.medicine2,
+        data.medicine2_label
+    );
+
+
+    /* -------------------------
+       SHOW RESULT
+    ------------------------- */
+
+    result.style.display =
+        "block";
+
+
+    result.scrollIntoView({
+        behavior: "smooth",
+        block: "nearest"
+    });
+
+}
+
+
+/* =====================================================
+   LABEL CARD
+===================================================== */
+
+function addLabelCard(
+    container,
+    medicine,
+    label
+) {
+
+
+    if (!label) {
+        return;
+    }
+
+
+    let content = "";
+
+
+    /* -------------------------
+       DRUG INTERACTIONS
+    ------------------------- */
+
+    if (
+        label.drug_interactions &&
+        label.drug_interactions.length
+    ) {
+
+        content +=
+            "<strong>Drug Interactions:</strong><br>" +
+            label.drug_interactions
+                .map(
+                    text =>
+                        escapeHtml(text)
+                )
+                .join("<br><br>");
+
+    }
+
+
+    /* -------------------------
+       WARNINGS
+    ------------------------- */
+
+    if (
+        label.warnings &&
+        label.warnings.length
+    ) {
+
+        content +=
+            "<br><br><strong>Warnings:</strong><br>" +
+            label.warnings
+                .map(
+                    text =>
+                        escapeHtml(text)
+                )
+                .join("<br><br>");
+
+    }
+
+
+    /* -------------------------
+       CONTRAINDICATIONS
+    ------------------------- */
+
+    if (
+        label.contraindications &&
+        label.contraindications.length
+    ) {
+
+        content +=
+            "<br><br><strong>Contraindications:</strong><br>" +
+            label.contraindications
+                .map(
+                    text =>
+                        escapeHtml(text)
+                )
+                .join("<br><br>");
+
+    }
+
+
+    /* -------------------------
+       BOXED WARNING
+    ------------------------- */
+
+    if (
+        label.boxed_warning &&
+        label.boxed_warning.length
+    ) {
+
+        content +=
+            "<br><br><strong>Boxed Warning:</strong><br>" +
+            label.boxed_warning
+                .map(
+                    text =>
+                        escapeHtml(text)
+                )
+                .join("<br><br>");
+
+    }
+
+
+    if (!content) {
+
+        content =
+            "No additional label sections were retrieved.";
+
+    }
+
+
+    /* -------------------------
+       CREATE CARD
+    ------------------------- */
+
+    const card =
+        document.createElement(
+            "div"
+        );
+
+
+    card.className =
+        "label-card";
+
+
+    card.innerHTML = `
+
+        <h4>
+            💊 ${escapeHtml(medicine)}
+        </h4>
+
+        <p>
+            ${content}
+        </p>
+
+    `;
+
+
+    container.appendChild(card);
+
+}
+
+
+/* =====================================================
+   HTML ESCAPE
+===================================================== */
+
+function escapeHtml(value) {
+
+    return String(value)
+
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+
+        .replace(
+            /</g,
+            "&lt;"
+        )
+
+        .replace(
+            />/g,
+            "&gt;"
+        )
+
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+
+        .replace(
+            /'/g,
+            "&#039;"
+        );
+
+}
+
+</script>
+
+</body>
+
+</html>

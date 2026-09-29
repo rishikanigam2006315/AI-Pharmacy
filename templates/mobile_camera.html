@@ -1,0 +1,1160 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width,initial-scale=1.0"
+>
+
+<title>Phone Camera | AI Pharmacy</title>
+
+
+<style>
+
+/* =====================================================
+   GLOBAL
+===================================================== */
+
+*{
+    box-sizing:border-box;
+}
+
+
+body{
+
+    margin:0;
+
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+
+    background:#0f172a;
+
+    color:#f8fafc;
+
+}
+
+
+/* =====================================================
+   PAGE
+===================================================== */
+
+.page{
+
+    min-height:100vh;
+
+    padding:18px;
+
+}
+
+
+.container{
+
+    width:min(620px,100%);
+
+    margin:auto;
+
+}
+
+
+/* =====================================================
+   BACK BUTTON
+===================================================== */
+
+.back{
+
+    display:inline-block;
+
+    margin:8px 0 16px;
+
+    color:#93c5fd;
+
+    text-decoration:none;
+
+    font-weight:700;
+
+    transition:.2s ease;
+
+}
+
+
+.back:hover{
+
+    color:#bfdbfe;
+
+}
+
+
+/* =====================================================
+   HEADER
+===================================================== */
+
+.header{
+
+    background:#1e293b;
+
+    border:1px solid #334155;
+
+    color:#fff;
+
+    border-radius:22px;
+
+    padding:25px 20px;
+
+    text-align:center;
+
+    box-shadow:
+        0 10px 30px
+        rgba(0,0,0,.20);
+
+}
+
+
+.header h1{
+
+    margin:0;
+
+    font-size:28px;
+
+}
+
+
+.header p{
+
+    margin:8px 0 0;
+
+    color:#94a3b8;
+
+    font-size:14px;
+
+    line-height:1.5;
+
+}
+
+
+/* =====================================================
+   MAIN CARD
+===================================================== */
+
+.card{
+
+    margin-top:18px;
+
+    background:#1e293b;
+
+    border-radius:18px;
+
+    padding:16px;
+
+    box-shadow:
+        0 10px 30px
+        rgba(0,0,0,.20);
+
+    border:1px solid #334155;
+
+}
+
+
+/* =====================================================
+   CAMERA
+===================================================== */
+
+.camera{
+
+    width:100%;
+
+    aspect-ratio:3/4;
+
+    background:#020617;
+
+    border-radius:14px;
+
+    overflow:hidden;
+
+    border:1px solid #334155;
+
+    position:relative;
+
+}
+
+
+video{
+
+    width:100%;
+
+    height:100%;
+
+    object-fit:cover;
+
+}
+
+
+/* =====================================================
+   CAMERA OVERLAY
+===================================================== */
+
+.camera::before{
+
+    content:"";
+
+    position:absolute;
+
+    inset:12px;
+
+    border:2px solid
+        rgba(147,197,253,.45);
+
+    border-radius:10px;
+
+    pointer-events:none;
+
+    z-index:2;
+
+}
+
+
+/* =====================================================
+   BUTTONS
+===================================================== */
+
+button{
+
+    width:100%;
+
+    height:52px;
+
+    margin-top:12px;
+
+    border:0;
+
+    border-radius:12px;
+
+    background:#2563eb;
+
+    color:#fff;
+
+    font-weight:800;
+
+    font-size:15px;
+
+    cursor:pointer;
+
+    transition:.2s ease;
+
+    box-shadow:
+        0 8px 20px
+        rgba(37,99,235,.22);
+
+}
+
+
+button:hover{
+
+    background:#1d4ed8;
+
+    transform:translateY(-1px);
+
+    box-shadow:
+        0 12px 25px
+        rgba(37,99,235,.28);
+
+}
+
+
+button:active{
+
+    transform:translateY(0);
+
+}
+
+
+/* =====================================================
+   SECONDARY BUTTON
+===================================================== */
+
+button.secondary{
+
+    background:#172554;
+
+    color:#93c5fd;
+
+    border:1px solid #1d4ed8;
+
+    box-shadow:none;
+
+}
+
+
+button.secondary:hover{
+
+    background:#1e3a8a;
+
+}
+
+
+/* =====================================================
+   STATUS
+===================================================== */
+
+.status{
+
+    margin-top:12px;
+
+    padding:12px;
+
+    border-radius:10px;
+
+    background:#0f172a;
+
+    border:1px solid #334155;
+
+    color:#94a3b8;
+
+    font-size:13px;
+
+    line-height:1.5;
+
+}
+
+
+/* =====================================================
+   RESULT
+===================================================== */
+
+.result{
+
+    display:none;
+
+    margin-top:15px;
+
+    padding:18px;
+
+    border-radius:14px;
+
+    background:#0f172a;
+
+    border:1px solid #334155;
+
+}
+
+
+.result h2{
+
+    margin:0 0 8px;
+
+    color:#f8fafc;
+
+    font-size:20px;
+
+}
+
+
+#resultText{
+
+    color:#cbd5e1;
+
+    line-height:1.6;
+
+    font-size:14px;
+
+}
+
+
+/* =====================================================
+   NORMAL RESULT
+===================================================== */
+
+.normal{
+
+    border-color:#22c55e;
+
+    background:#052e16;
+
+}
+
+
+.normal h2{
+
+    color:#86efac;
+
+}
+
+
+/* =====================================================
+   DEFECTIVE RESULT
+===================================================== */
+
+.defective{
+
+    border-color:#ef4444;
+
+    background:#450a0a;
+
+}
+
+
+.defective h2{
+
+    color:#fca5a5;
+
+}
+
+
+/* =====================================================
+   REVIEW RESULT
+===================================================== */
+
+.review{
+
+    border-color:#f59e0b;
+
+    background:#422006;
+
+}
+
+
+.review h2{
+
+    color:#fbbf24;
+
+}
+
+
+/* =====================================================
+   RESULT DETAILS
+===================================================== */
+
+.result-detail{
+
+    margin-top:10px;
+
+    padding:10px;
+
+    border-radius:8px;
+
+    background:rgba(15,23,42,.55);
+
+    border:1px solid
+        rgba(148,163,184,.15);
+
+}
+
+
+/* =====================================================
+   NOTE
+===================================================== */
+
+.note{
+
+    margin-top:14px;
+
+    color:#94a3b8;
+
+    font-size:12px;
+
+    line-height:1.5;
+
+    padding:12px;
+
+    background:#0f172a;
+
+    border:1px solid #334155;
+
+    border-radius:10px;
+
+}
+
+
+/* =====================================================
+   CANVAS
+===================================================== */
+
+#canvas{
+
+    display:none;
+
+}
+
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
+@media(max-width:600px){
+
+    .page{
+
+        padding:14px;
+
+    }
+
+
+    .header{
+
+        padding:22px 16px;
+
+    }
+
+
+    .header h1{
+
+        font-size:24px;
+
+    }
+
+
+    .header p{
+
+        font-size:13px;
+
+    }
+
+
+    .card{
+
+        padding:12px;
+
+    }
+
+
+    button{
+
+        height:50px;
+
+    }
+
+}
+
+
+/* =====================================================
+   VERY SMALL SCREEN
+===================================================== */
+
+@media(max-width:380px){
+
+    .header h1{
+
+        font-size:21px;
+
+    }
+
+
+    .header p{
+
+        font-size:12px;
+
+    }
+
+
+    .camera{
+
+        aspect-ratio:3/4;
+
+    }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<div class="page">
+
+
+    <div class="container">
+
+
+        <!-- BACK -->
+
+        <a
+            class="back"
+            href="/"
+        >
+
+            ← Dashboard
+
+        </a>
+
+
+        <!-- HEADER -->
+
+        <div class="header">
+
+            <h1>
+                📱 Phone Camera Inspection
+            </h1>
+
+            <p>
+                Use your phone camera to capture
+                a tablet and send it to the AI
+                inspection backend.
+            </p>
+
+        </div>
+
+
+        <!-- MAIN CARD -->
+
+        <div class="card">
+
+
+            <!-- CAMERA -->
+
+            <div class="camera">
+
+                <video
+                    id="video"
+                    autoplay
+                    playsinline>
+                </video>
+
+            </div>
+
+
+            <!-- START CAMERA -->
+
+            <button
+                onclick="startCamera()"
+            >
+
+                📷 Start Phone Camera
+
+            </button>
+
+
+            <!-- CAPTURE -->
+
+            <button
+                class="secondary"
+                onclick="capture()"
+            >
+
+                🔍 Capture & Analyse
+
+            </button>
+
+
+            <!-- STATUS -->
+
+            <div
+                id="status"
+                class="status"
+            >
+
+                Camera not started.
+
+            </div>
+
+
+            <!-- RESULT -->
+
+            <div
+                id="result"
+                class="result"
+            >
+
+                <h2
+                    id="resultTitle"
+                >
+
+                    Inspection Result
+
+                </h2>
+
+
+                <div
+                    id="resultText"
+                >
+
+                </div>
+
+            </div>
+
+
+            <!-- NOTE -->
+
+            <div class="note">
+
+                The phone camera is used only to
+                capture the image.
+
+                The image is sent to your Flask
+                server, where OpenCV and the trained
+                MobileNetV2 model perform the
+                inspection.
+
+            </div>
+
+
+        </div>
+
+
+        <!-- HIDDEN CANVAS -->
+
+        <canvas
+            id="canvas"
+            style="display:none"
+        ></canvas>
+
+
+    </div>
+
+</div>
+
+
+<script>
+
+/* =====================================================
+   CAMERA STREAM
+===================================================== */
+
+let stream = null;
+
+
+/* =====================================================
+   START CAMERA
+===================================================== */
+
+async function startCamera(){
+
+    const status =
+        document.getElementById(
+            "status"
+        );
+
+
+    try{
+
+        /*
+         * Phone browsers require HTTPS
+         * for camera access.
+         */
+
+        if(!window.isSecureContext){
+
+            status.innerText =
+                "Camera requires HTTPS on a phone. Open the secure project URL.";
+
+            return;
+
+        }
+
+
+        /*
+         * Request rear camera.
+         */
+
+        stream =
+            await navigator.mediaDevices
+                .getUserMedia({
+
+                    video:{
+                        facingMode:{
+                            ideal:"environment"
+                        }
+                    },
+
+                    audio:false
+
+                });
+
+
+        /*
+         * Attach camera stream.
+         */
+
+        document
+            .getElementById("video")
+            .srcObject =
+                stream;
+
+
+        status.innerText =
+            "🟢 Camera active. Place one tablet in the frame.";
+
+    }
+
+
+    catch(error){
+
+        console.error(error);
+
+
+        status.innerText =
+            "❌ Camera permission failed: "
+            + error.message;
+
+    }
+
+}
+
+
+/* =====================================================
+   CAPTURE IMAGE
+===================================================== */
+
+async function capture(){
+
+    const video =
+        document.getElementById(
+            "video"
+        );
+
+
+    const canvas =
+        document.getElementById(
+            "canvas"
+        );
+
+
+    const status =
+        document.getElementById(
+            "status"
+        );
+
+
+    /*
+     * Check camera.
+     */
+
+    if(!video.videoWidth){
+
+        status.innerText =
+            "Please start the camera first.";
+
+        return;
+
+    }
+
+
+    /*
+     * Set canvas size
+     * equal to camera frame.
+     */
+
+    canvas.width =
+        video.videoWidth;
+
+
+    canvas.height =
+        video.videoHeight;
+
+
+    /*
+     * Draw current camera frame.
+     */
+
+    canvas
+        .getContext("2d")
+        .drawImage(
+            video,
+            0,
+            0,
+            canvas.width,
+            canvas.height
+        );
+
+
+    /*
+     * Convert image to Base64 JPEG.
+     */
+
+    const image =
+        canvas.toDataURL(
+            "image/jpeg",
+            0.9
+        );
+
+
+    status.innerText =
+        "🔄 Sending image to AI inspection...";
+
+
+    try{
+
+        /*
+         * Send image to Flask backend.
+         */
+
+        const response =
+            await fetch(
+                "/api/inspect-tablet",
+                {
+
+                    method:"POST",
+
+                    headers:{
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body:
+                        JSON.stringify({
+                            image:image
+                        })
+
+                }
+            );
+
+
+        /*
+         * Read JSON response.
+         */
+
+        const data =
+            await response.json();
+
+
+        /*
+         * Handle server error.
+         */
+
+        if(!response.ok){
+
+            throw new Error(
+                data.error ||
+                "Inspection failed."
+            );
+
+        }
+
+
+        /*
+         * Display result.
+         */
+
+        showResult(data);
+
+
+        /*
+         * History is saved
+         * by the Flask backend.
+         */
+
+        status.innerText =
+            "✅ Analysis complete. Result saved to History.";
+
+    }
+
+
+    catch(error){
+
+        console.error(error);
+
+
+        status.innerText =
+            "❌ " + error.message;
+
+    }
+
+}
+
+
+/* =====================================================
+   SHOW RESULT
+===================================================== */
+
+function showResult(data){
+
+    const box =
+        document.getElementById(
+            "result"
+        );
+
+
+    const title =
+        document.getElementById(
+            "resultTitle"
+        );
+
+
+    const text =
+        document.getElementById(
+            "resultText"
+        );
+
+
+    /*
+     * Reset result classes.
+     */
+
+    box.className =
+        "result";
+
+
+    /* =================================================
+       NORMAL
+    ================================================= */
+
+    if(
+        data.ai_status ===
+        "NORMAL"
+    ){
+
+        box.classList.add(
+            "normal"
+        );
+
+
+        title.innerText =
+            "🟢 Tablet Quality: NORMAL";
+
+    }
+
+
+    /* =================================================
+       DEFECTIVE
+    ================================================= */
+
+    else if(
+        data.ai_status ===
+        "DEFECTIVE"
+    ){
+
+        box.classList.add(
+            "defective"
+        );
+
+
+        title.innerText =
+            "🔴 Tablet Quality: DEFECTIVE";
+
+    }
+
+
+    /* =================================================
+       NO TABLET
+    ================================================= */
+
+    else if(
+        data.result ===
+        "NO_TABLET"
+    ){
+
+        box.classList.add(
+            "review"
+        );
+
+
+        title.innerText =
+            "⚪ No Tablet Detected";
+
+    }
+
+
+    /* =================================================
+       MANUAL REVIEW
+    ================================================= */
+
+    else{
+
+        box.classList.add(
+            "review"
+        );
+
+
+        title.innerText =
+            "🟡 Manual Review Required";
+
+    }
+
+
+    /*
+     * Display AI result details.
+     */
+
+    text.innerHTML = `
+
+        <div class="result-detail">
+
+            <strong>
+                AI Confidence:
+            </strong>
+
+            ${data.ai_confidence ?? "—"}%
+
+        </div>
+
+
+        <div class="result-detail">
+
+            <strong>
+                Brightness:
+            </strong>
+
+            ${data.brightness ?? "—"}
+
+        </div>
+
+
+        <div class="result-detail">
+
+            <strong>
+                Sharpness:
+            </strong>
+
+            ${data.sharpness ?? "—"}
+
+        </div>
+
+
+        <div class="result-detail">
+
+            <strong>
+                Detection:
+            </strong>
+
+            ${data.result ?? "—"}
+
+        </div>
+
+    `;
+
+
+    /*
+     * Show result card.
+     */
+
+    box.style.display =
+        "block";
+
+}
+
+
+/* =====================================================
+   STOP CAMERA WHEN PAGE CLOSES
+===================================================== */
+
+window.addEventListener(
+    "beforeunload",
+    function(){
+
+        if(stream){
+
+            stream
+                .getTracks()
+                .forEach(
+                    track =>
+                        track.stop()
+                );
+
+        }
+
+    }
+);
+
+</script>
+
+
+</body>
+
+</html>

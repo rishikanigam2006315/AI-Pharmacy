@@ -1,0 +1,1092 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<title>AI Pharmacy History</title>
+
+
+<style>
+
+/* =====================================================
+   GLOBAL
+===================================================== */
+
+* {
+    box-sizing: border-box;
+}
+
+
+body {
+    margin: 0;
+
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+
+    background: #0f172a;
+
+    color: #f8fafc;
+}
+
+
+/* =====================================================
+   CONTAINER
+===================================================== */
+
+.container {
+    width: min(1200px, 94%);
+
+    margin: auto;
+
+    padding: 30px 0 50px;
+}
+
+
+/* =====================================================
+   BACK BUTTON
+===================================================== */
+
+.back {
+    display: inline-block;
+
+    margin-bottom: 20px;
+
+    color: #93c5fd;
+
+    text-decoration: none;
+
+    font-weight: 700;
+
+    font-size: 16px;
+
+    transition: 0.2s ease;
+}
+
+
+.back:hover {
+    color: #bfdbfe;
+}
+
+
+/* =====================================================
+   HEADER
+===================================================== */
+
+.header {
+    background: #1e293b;
+
+    border: 1px solid #334155;
+
+    color: white;
+
+    padding: 38px 25px;
+
+    border-radius: 24px;
+
+    text-align: center;
+
+    margin-bottom: 25px;
+
+    box-shadow:
+        0 15px 35px
+        rgba(0,0,0,0.22);
+}
+
+
+.header h1 {
+    margin: 0;
+
+    font-size: 36px;
+}
+
+
+.header p {
+    margin: 10px 0 0;
+
+    color: #94a3b8;
+
+    font-size: 15px;
+}
+
+
+/* =====================================================
+   STATS
+===================================================== */
+
+.stats {
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, 1fr);
+
+    gap: 18px;
+
+    margin-bottom: 28px;
+}
+
+
+.stat-card {
+    background: #1e293b;
+
+    padding: 22px;
+
+    border-radius: 18px;
+
+    border: 1px solid #334155;
+
+    box-shadow:
+        0 8px 25px
+        rgba(0,0,0,0.18);
+}
+
+
+.stat-title {
+    color: #94a3b8;
+
+    font-size: 13px;
+
+    font-weight: 700;
+
+    text-transform: uppercase;
+}
+
+
+.stat-number {
+    color: #93c5fd;
+
+    font-size: 32px;
+
+    font-weight: 800;
+
+    margin-top: 8px;
+}
+
+
+/* =====================================================
+   ACTIVITY HEADER
+===================================================== */
+
+.activity-header {
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    margin-bottom: 15px;
+}
+
+
+.activity-header h2 {
+    margin: 0;
+
+    color: #f8fafc;
+}
+
+
+/* =====================================================
+   BUTTONS
+===================================================== */
+
+button,
+.mobile-link {
+    border: none;
+
+    border-radius: 10px;
+
+    padding: 11px 16px;
+
+    cursor: pointer;
+
+    font-weight: 700;
+
+    text-decoration: none;
+
+    transition: 0.2s ease;
+}
+
+
+/* Refresh */
+
+.refresh {
+    background: #172554;
+
+    color: #93c5fd;
+
+    border: 1px solid #1d4ed8;
+}
+
+
+.refresh:hover {
+    background: #1e3a8a;
+}
+
+
+/* Clear */
+
+.clear {
+    background: #450a0a;
+
+    color: #fca5a5;
+
+    border: 1px solid #7f1d1d;
+
+    margin-left: 6px;
+}
+
+
+.clear:hover {
+    background: #7f1d1d;
+
+    color: white;
+}
+
+
+/* Mobile Camera */
+
+.mobile-link {
+    background: #2563eb;
+
+    color: white;
+
+    display: inline-block;
+
+    margin-left: 8px;
+}
+
+
+.mobile-link:hover {
+    background: #1d4ed8;
+}
+
+
+/* =====================================================
+   TABLE
+===================================================== */
+
+.table-container {
+    background: #1e293b;
+
+    border-radius: 18px;
+
+    border: 1px solid #334155;
+
+    box-shadow:
+        0 8px 25px
+        rgba(0,0,0,0.18);
+
+    overflow-x: auto;
+}
+
+
+table {
+    width: 100%;
+
+    border-collapse: collapse;
+
+    min-width: 850px;
+}
+
+
+/* Table Header */
+
+th {
+    background: #0f172a;
+
+    color: #94a3b8;
+
+    text-align: left;
+
+    padding: 16px;
+
+    font-size: 12px;
+
+    text-transform: uppercase;
+
+    border-bottom: 1px solid #334155;
+}
+
+
+/* Table Cells */
+
+td {
+    padding: 16px;
+
+    border-top: 1px solid #334155;
+
+    vertical-align: top;
+
+    color: #cbd5e1;
+
+    font-size: 13px;
+}
+
+
+/* Hover */
+
+tbody tr:hover {
+    background: #172033;
+}
+
+
+/* =====================================================
+   MODULE
+===================================================== */
+
+.module {
+    color: #93c5fd;
+
+    font-weight: 800;
+}
+
+
+/* =====================================================
+   STATUS
+===================================================== */
+
+.status {
+    display: inline-block;
+
+    padding: 6px 10px;
+
+    border-radius: 20px;
+
+    background: #172554;
+
+    color: #93c5fd;
+
+    border: 1px solid #1d4ed8;
+
+    font-size: 12px;
+
+    font-weight: 700;
+}
+
+
+/* =====================================================
+   DETAILS
+===================================================== */
+
+.details {
+    max-width: 450px;
+
+    color: #94a3b8;
+
+    font-size: 13px;
+
+    line-height: 1.5;
+
+    white-space: pre-wrap;
+
+    word-break: break-word;
+
+    background: #0f172a;
+
+    border: 1px solid #334155;
+
+    border-radius: 8px;
+
+    padding: 10px;
+}
+
+
+/* =====================================================
+   EMPTY
+===================================================== */
+
+.empty {
+    text-align: center;
+
+    padding: 45px;
+
+    color: #94a3b8;
+}
+
+
+/* =====================================================
+   PHONE CAMERA BOX
+===================================================== */
+
+.phone-box {
+    margin-top: 25px;
+
+    background: #1e293b;
+
+    padding: 18px 20px;
+
+    border-radius: 16px;
+
+    border: 1px solid #334155;
+
+    box-shadow:
+        0 8px 25px
+        rgba(0,0,0,0.18);
+
+    color: #cbd5e1;
+}
+
+
+.phone-box strong {
+    color: #f8fafc;
+}
+
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
+@media(max-width: 850px) {
+
+    .stats {
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
+
+
+    .header h1 {
+        font-size: 28px;
+    }
+
+}
+
+
+@media(max-width: 550px) {
+
+    .container {
+        width: 94%;
+    }
+
+
+    .stats {
+        grid-template-columns: 1fr;
+    }
+
+
+    .activity-header {
+        flex-direction: column;
+
+        align-items: flex-start;
+
+        gap: 12px;
+    }
+
+
+    .activity-header > div {
+        width: 100%;
+    }
+
+
+    button,
+    .mobile-link {
+        font-size: 13px;
+    }
+
+
+    .mobile-link {
+        margin-left: 5px;
+    }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<div class="container">
+
+
+    <!-- BACK -->
+
+    <a
+        href="/"
+        class="back"
+    >
+
+        ← Back to Dashboard
+
+    </a>
+
+
+    <!-- HEADER -->
+
+    <div class="header">
+
+        <h1>
+            📊 AI Pharmacy History
+        </h1>
+
+        <p>
+            Inspection, medication screening and
+            drug-discovery activity
+        </p>
+
+    </div>
+
+
+    <!-- =================================================
+         STATS
+    ================================================= -->
+
+    <div class="stats">
+
+
+        <!-- TOTAL -->
+
+        <div class="stat-card">
+
+            <div class="stat-title">
+                Total Activities
+            </div>
+
+            <div
+                class="stat-number"
+                id="total"
+            >
+                0
+            </div>
+
+        </div>
+
+
+        <!-- TABLET -->
+
+        <div class="stat-card">
+
+            <div class="stat-title">
+                Tablet Inspections
+            </div>
+
+            <div
+                class="stat-number"
+                id="tablet"
+            >
+                0
+            </div>
+
+        </div>
+
+
+        <!-- MEDICATION -->
+
+        <div class="stat-card">
+
+            <div class="stat-title">
+                Medication Checks
+            </div>
+
+            <div
+                class="stat-number"
+                id="medication"
+            >
+                0
+            </div>
+
+        </div>
+
+
+        <!-- DRUG SEARCH -->
+
+        <div class="stat-card">
+
+            <div class="stat-title">
+                Drug Searches
+            </div>
+
+            <div
+                class="stat-number"
+                id="drugs"
+            >
+                0
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+    <!-- =================================================
+         ACTIVITY HEADER
+    ================================================= -->
+
+    <div class="activity-header">
+
+        <h2>
+            Recent Activity
+        </h2>
+
+
+        <div>
+
+            <button
+                class="refresh"
+                onclick="loadHistory()"
+            >
+
+                ↻ Refresh
+
+            </button>
+
+
+            <button
+                class="clear"
+                onclick="clearHistory()"
+            >
+
+                Clear
+
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- =================================================
+         TABLE
+    ================================================= -->
+
+    <div class="table-container">
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>
+                        Time
+                    </th>
+
+                    <th>
+                        Module
+                    </th>
+
+                    <th>
+                        Status
+                    </th>
+
+                    <th>
+                        Details
+                    </th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody id="historyBody">
+
+                <tr>
+
+                    <td
+                        colspan="4"
+                        class="empty"
+                    >
+
+                        Loading history...
+
+                    </td>
+
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+
+    <!-- =================================================
+         PHONE CAMERA
+    ================================================= -->
+
+    <div class="phone-box">
+
+        📱 <strong>Phone Camera:</strong>
+
+        Open
+
+        <a
+            class="mobile-link"
+            href="/mobile-camera"
+        >
+
+            Mobile Camera Mode
+
+        </a>
+
+        <br><br>
+
+        Results from phone camera inspections
+        will automatically appear in this History.
+
+    </div>
+
+
+</div>
+
+
+<script>
+
+
+/* =========================================================
+   LOAD HISTORY
+========================================================= */
+
+async function loadHistory() {
+
+    try {
+
+
+        /* -----------------------------------------------
+           FETCH HISTORY
+        ------------------------------------------------ */
+
+        const historyResponse =
+            await fetch(
+                "/api/history?ts=" + Date.now()
+            );
+
+
+        /* -----------------------------------------------
+           FETCH STATS
+        ------------------------------------------------ */
+
+        const statsResponse =
+            await fetch(
+                "/api/history/stats?ts=" + Date.now()
+            );
+
+
+        const history =
+            await historyResponse.json();
+
+
+        const stats =
+            await statsResponse.json();
+
+
+        /* =================================================
+           UPDATE STATS
+        ================================================= */
+
+        document.getElementById(
+            "total"
+        ).innerText =
+            stats.total || 0;
+
+
+        document.getElementById(
+            "tablet"
+        ).innerText =
+            stats.tablet_inspections || 0;
+
+
+        document.getElementById(
+            "medication"
+        ).innerText =
+            stats.medication_checks || 0;
+
+
+        document.getElementById(
+            "drugs"
+        ).innerText =
+            stats.drug_searches || 0;
+
+
+        /* =================================================
+           TABLE
+        ================================================= */
+
+        const body =
+            document.getElementById(
+                "historyBody"
+            );
+
+
+        /* No history */
+
+        if (
+            !history ||
+            history.length === 0
+        ) {
+
+            body.innerHTML = `
+
+                <tr>
+
+                    <td
+                        colspan="4"
+                        class="empty"
+                    >
+
+                        No activity recorded yet.
+
+                    </td>
+
+                </tr>
+
+            `;
+
+            return;
+
+        }
+
+
+        /* Clear existing rows */
+
+        body.innerHTML = "";
+
+
+        /* =================================================
+           CREATE ROWS
+        ================================================= */
+
+        history.forEach(
+            function(item) {
+
+
+                let details =
+                    item.details || "";
+
+
+                /* Try parsing JSON */
+
+                try {
+
+                    const parsed =
+                        JSON.parse(details);
+
+
+                    details =
+                        JSON.stringify(
+                            parsed,
+                            null,
+                            2
+                        );
+
+                }
+
+                catch (e) {
+
+                    /* Keep original text */
+
+                }
+
+
+                /* Create row */
+
+                const row =
+                    document.createElement(
+                        "tr"
+                    );
+
+
+                row.innerHTML = `
+
+                    <td>
+
+                        ${escapeHtml(
+                            item.created_at || ""
+                        )}
+
+                    </td>
+
+
+                    <td class="module">
+
+                        ${escapeHtml(
+                            item.module || ""
+                        )}
+
+                    </td>
+
+
+                    <td>
+
+                        <span class="status">
+
+                            ${escapeHtml(
+                                item.status || ""
+                            )}
+
+                        </span>
+
+                    </td>
+
+
+                    <td>
+
+                        <div class="details">
+
+                            ${escapeHtml(
+                                details
+                            )}
+
+                        </div>
+
+                    </td>
+
+                `;
+
+
+                body.appendChild(row);
+
+            }
+        );
+
+    }
+
+
+    catch (error) {
+
+        console.error(
+            "History error:",
+            error
+        );
+
+
+        document.getElementById(
+            "historyBody"
+        ).innerHTML = `
+
+            <tr>
+
+                <td
+                    colspan="4"
+                    class="empty"
+                >
+
+                    ❌ Could not load history.
+
+                </td>
+
+            </tr>
+
+        `;
+
+    }
+
+}
+
+
+/* =========================================================
+   CLEAR HISTORY
+========================================================= */
+
+async function clearHistory() {
+
+
+    const confirmClear =
+        confirm(
+            "Are you sure you want to clear all history?"
+        );
+
+
+    if (!confirmClear) {
+
+        return;
+
+    }
+
+
+    try {
+
+
+        await fetch(
+            "/api/history/clear",
+            {
+                method: "POST"
+            }
+        );
+
+
+        loadHistory();
+
+    }
+
+
+    catch (error) {
+
+        console.error(
+            error
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   HTML ESCAPE
+========================================================= */
+
+function escapeHtml(value) {
+
+    return String(value)
+
+        .replaceAll(
+            "&",
+            "&amp;"
+        )
+
+        .replaceAll(
+            "<",
+            "&lt;"
+        )
+
+        .replaceAll(
+            ">",
+            "&gt;"
+        )
+
+        .replaceAll(
+            '"',
+            "&quot;"
+        )
+
+        .replaceAll(
+            "'",
+            "&#039;"
+        );
+
+}
+
+
+/* =========================================================
+   FIRST LOAD
+========================================================= */
+
+loadHistory();
+
+
+/* =========================================================
+   AUTO REFRESH
+========================================================= */
+
+setInterval(
+    loadHistory,
+    5000
+);
+
+
+</script>
+
+
+</body>
+
+</html>

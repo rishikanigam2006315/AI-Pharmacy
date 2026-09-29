@@ -1,0 +1,2115 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Tablet Quality Control</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: #0f172a;
+    color: #f8fafc;
+}
+
+        .page {
+            min-height: 100vh;
+            padding: 32px 20px 55px;
+        }
+
+        .container {
+            width: min(1150px, 100%);
+            margin: auto;
+        }
+
+
+        /* =====================================================
+           BACK BUTTON
+        ===================================================== */
+
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+
+            margin-bottom: 20px;
+
+            text-decoration: none;
+
+            color: #93c5fd;
+
+            font-size: 16px;
+
+            font-weight: 700;
+        }
+
+        .back-button:hover {
+            color: #bfdbfe;
+        }
+
+
+        /* =====================================================
+           HEADER
+        ===================================================== */
+
+       .header {
+    background: #1e293b;
+    border: 1px solid #334155;
+
+            color: white;
+
+            border-radius: 24px;
+
+            padding: 38px 30px;
+
+            text-align: center;
+
+            margin-bottom: 25px;
+
+            box-shadow:
+    0 15px 35px
+    rgba(0,0,0,0.22);
+        }
+
+        .header-icon {
+            font-size: 42px;
+            margin-bottom: 8px;
+        }
+
+        .header h1 {
+            margin: 0;
+
+            font-size: 34px;
+
+            font-weight: 800;
+        }
+
+        .header p {
+            margin: 10px 0 0;
+
+            font-size: 16px;
+
+            color:
+                rgba(255,255,255,0.85);
+        }
+
+
+        /* =====================================================
+           MAIN GRID
+        ===================================================== */
+
+        .main-grid {
+            display: grid;
+
+            grid-template-columns:
+                minmax(0, 1.45fr)
+                minmax(300px, 0.55fr);
+
+            gap: 22px;
+
+            align-items: start;
+        }
+
+
+        /* =====================================================
+           CARD
+        ===================================================== */
+
+        .card {
+    background: #1e293b;
+    border-radius: 20px;
+    border: 1px solid #334155;
+
+            padding: 24px;
+
+            box-shadow:
+    0 10px 30px
+    rgba(0,0,0,0.20);
+        }
+
+        .card-title {
+            margin: 0;
+
+            font-size: 22px;
+
+            color: #f8fafc;
+        }
+
+        .card-subtitle {
+            margin: 7px 0 20px;
+
+            color: #94a3b8;
+
+            font-size: 14px;
+
+            line-height: 1.6;
+        }
+
+
+        /* =====================================================
+           CAMERA
+        ===================================================== */
+
+        .camera-wrapper {
+            position: relative;
+
+            width: 100%;
+
+            aspect-ratio: 16 / 9;
+
+            background:
+                #0f172a;
+
+            border-radius: 16px;
+
+            overflow: hidden;
+
+            border: 2px solid #e2e8f0;
+
+            box-shadow:
+                inset 0 0 0 1px
+                rgba(255,255,255,0.05);
+        }
+
+        #video {
+            width: 100%;
+            height: 100%;
+
+            display: block;
+
+            object-fit: cover;
+
+            background: #020617;
+        }
+
+        #canvas {
+            display: none;
+        }
+
+
+        /* =====================================================
+           CAMERA PLACEHOLDER
+        ===================================================== */
+
+        .camera-placeholder {
+            position: absolute;
+
+            inset: 0;
+
+            display: flex;
+
+            flex-direction: column;
+
+            align-items: center;
+
+            justify-content: center;
+
+            color: #94a3b8;
+
+            background:
+                radial-gradient(
+                    circle at center,
+                    #172554,
+                    #020617
+                );
+
+            pointer-events: none;
+        }
+
+        .camera-placeholder-icon {
+            font-size: 52px;
+
+            margin-bottom: 10px;
+        }
+
+        .camera-placeholder strong {
+            color: white;
+
+            font-size: 17px;
+        }
+
+        .camera-placeholder span {
+            margin-top: 5px;
+
+            font-size: 13px;
+        }
+
+
+        /* =====================================================
+           DETECTION BOX
+        ===================================================== */
+
+        #detectionBox {
+            position: absolute;
+
+            display: none;
+
+            border: 3px solid #22c55e;
+
+            border-radius: 12px;
+
+            box-shadow:
+                0 0 0 2px
+                rgba(34,197,94,0.20),
+
+                0 0 20px
+                rgba(34,197,94,0.35);
+
+            pointer-events: none;
+
+            z-index: 5;
+        }
+
+        .detection-label {
+            position: absolute;
+
+            top: -30px;
+
+            left: -3px;
+
+            background: #22c55e;
+
+            color: white;
+
+            padding: 5px 9px;
+
+            border-radius: 6px 6px 0 0;
+
+            font-size: 11px;
+
+            font-weight: 800;
+
+            white-space: nowrap;
+        }
+
+
+        /* =====================================================
+           CAMERA STATUS
+        ===================================================== */
+
+        .camera-status {
+            display: flex;
+
+            align-items: center;
+
+            gap: 8px;
+
+            margin-top: 12px;
+
+            color: #64748b;
+
+            font-size: 13px;
+        }
+
+        .status-dot {
+            width: 9px;
+            height: 9px;
+
+            border-radius: 50%;
+
+            background: #94a3b8;
+        }
+
+        .status-dot.active {
+            background: #22c55e;
+
+            box-shadow:
+                0 0 0 4px
+                rgba(34,197,94,0.12);
+        }
+
+
+        /* =====================================================
+           BUTTONS
+        ===================================================== */
+
+        .button-row {
+            display: grid;
+
+            grid-template-columns:
+                1fr 1fr;
+
+            gap: 12px;
+
+            margin-top: 16px;
+        }
+
+        .action-button {
+            height: 50px;
+
+            border: none;
+
+            border-radius: 11px;
+
+            font-size: 14px;
+
+            font-weight: 700;
+
+            cursor: pointer;
+
+            transition: 0.2s ease;
+        }
+
+        .start-button {
+    background: #172554;
+    color: #93c5fd;
+    border: 1px solid #1d4ed8;
+}
+
+.start-button:hover {
+    background: #1e3a8a;
+}
+
+       .analyse-button {
+    background: #2563eb;
+    color: white;
+}
+
+        .analyse-button:hover {
+            transform: translateY(-1px);
+
+            box-shadow:
+                0 12px 23px
+                rgba(124,58,237,0.27);
+        }
+
+        .analyse-button:disabled {
+            opacity: 0.5;
+
+            cursor: not-allowed;
+
+            transform: none;
+        }
+
+
+        /* =====================================================
+           RESULT
+        ===================================================== */
+
+        .result-card {
+            margin-top: 22px;
+
+            border-radius: 18px;
+
+            border: 1px solid #334155;
+
+            overflow: hidden;
+
+            background: #1e293b;
+
+            display: none;
+        }
+
+        .result-header {
+            padding: 20px;
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 15px;
+
+            background: #172033;
+        }
+
+        .result-icon {
+            width: 52px;
+            height: 52px;
+
+            border-radius: 50%;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            font-size: 26px;
+
+            flex-shrink: 0;
+        }
+
+        .result-heading {
+            flex: 1;
+        }
+
+        .result-heading h2 {
+            margin: 0;
+
+            font-size: 21px;
+
+            color: #1e293b;
+        }
+
+        .result-heading p {
+            margin: 5px 0 0;
+
+            color: #64748b;
+
+            font-size: 13px;
+        }
+
+
+         /* =====================================================
+           RESULT STATES
+        ===================================================== */
+
+        .result-normal {
+            border-color: #22c55e;
+        }
+
+        .result-normal .result-icon {
+            background: #dcfce7;
+        }
+
+        .result-defective {
+            border-color: #ef4444;
+        }
+
+        .result-defective .result-icon {
+            background: #fee2e2;
+        }
+
+        .result-review {
+            border-color: #f59e0b;
+        }
+
+        .result-review .result-icon {
+            background: #fef3c7;
+        }
+
+        .result-no-tablet {
+            border-color: #94a3b8;
+        }
+
+        .result-no-tablet .result-icon {
+            background: #334155;
+        }
+
+
+        /* =====================================================
+           RESULT BODY
+        ===================================================== */
+
+        .result-body {
+            padding: 20px;
+        }
+
+        .confidence-box {
+            background: #0f172a;
+
+            border: 1px solid #334155;
+
+            border-radius: 12px;
+
+            padding: 14px;
+
+            margin-bottom: 18px;
+        }
+
+        .confidence-top {
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            margin-bottom: 9px;
+        }
+
+        .confidence-label {
+            color: #94a3b8;
+
+            font-size: 13px;
+
+            font-weight: 700;
+        }
+
+        .confidence-value {
+            color: #93c5fd;
+
+            font-size: 18px;
+
+            font-weight: 800;
+        }
+
+        .progress {
+            width: 100%;
+
+            height: 9px;
+
+            background: #334155;
+
+            border-radius: 20px;
+
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+
+            width: 0%;
+
+            border-radius: 20px;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    #3b82f6,
+                    #2563eb
+                );
+
+            transition:
+                width 0.6s ease;
+        }
+
+
+        /* =====================================================
+           METRICS
+        ===================================================== */
+
+        .section-title {
+            margin: 0 0 12px;
+
+            font-size: 16px;
+
+            color: #f8fafc;
+        }
+
+        .metrics-grid {
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, minmax(0,1fr));
+
+            gap: 10px;
+
+            margin-bottom: 18px;
+        }
+
+        .metric {
+            background: #0f172a;
+
+            border: 1px solid #334155;
+
+            border-radius: 10px;
+
+            padding: 12px;
+
+            min-width: 0;
+        }
+
+        .metric-label {
+            display: block;
+
+            color: #94a3b8;
+
+            font-size: 10px;
+
+            text-transform: uppercase;
+
+            font-weight: 700;
+
+            margin-bottom: 5px;
+        }
+
+        .metric-value {
+            display: block;
+
+            color: #e2e8f0;
+
+            font-size: 14px;
+
+            font-weight: 800;
+
+            overflow-wrap: anywhere;
+        }
+
+
+        /* =====================================================
+           REASONS
+        ===================================================== */
+
+        .reason-box {
+            display: none;
+
+            padding: 14px;
+
+            background: #422006;
+
+            border: 1px solid #a16207;
+
+            color: #fbbf24;
+
+            border-radius: 11px;
+
+            font-size: 13px;
+
+            line-height: 1.5;
+
+            margin-top: 15px;
+        }
+
+
+        /* =====================================================
+           RIGHT INFORMATION
+        ===================================================== */
+
+        .info-item {
+            display: flex;
+
+            gap: 13px;
+
+            margin-bottom: 22px;
+        }
+
+        .info-icon {
+            width: 42px;
+            height: 42px;
+
+            flex-shrink: 0;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            border-radius: 11px;
+
+            background: #172554;
+
+            font-size: 20px;
+        }
+
+        .info-item h3 {
+            margin: 0 0 5px;
+
+            color: #f8fafc;
+
+            font-size: 15px;
+        }
+
+        .info-item p {
+            margin: 0;
+
+            color: #94a3b8;
+
+            font-size: 13px;
+
+            line-height: 1.55;
+        }
+
+
+        /* =====================================================
+           AI PIPELINE
+        ===================================================== */
+
+        .pipeline {
+            margin-top: 24px;
+
+            padding-top: 20px;
+
+            border-top: 1px solid #334155;
+        }
+
+        .pipeline-title {
+            margin: 0 0 15px;
+
+            font-size: 15px;
+
+            color: #f8fafc;
+        }
+
+        .pipeline-step {
+            display: flex;
+
+            align-items: center;
+
+            gap: 10px;
+
+            margin-bottom: 10px;
+
+            font-size: 13px;
+
+            color: #cbd5e1;
+        }
+
+        .pipeline-number {
+            width: 27px;
+            height: 27px;
+
+            border-radius: 50%;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            background: #172554;
+
+            color: #93c5fd;
+
+            font-weight: 800;
+
+            font-size: 12px;
+        }
+
+
+        /* =====================================================
+           DISCLAIMER
+        ===================================================== */
+
+        .disclaimer {
+            margin-top: 22px;
+
+            padding: 14px 17px;
+
+            border-radius: 11px;
+
+            background: #422006;
+
+            border: 1px solid #92400e;
+
+            color: #fdba74;
+
+            font-size: 12px;
+
+            line-height: 1.5;
+        }
+
+
+        /* =====================================================
+           RESPONSIVE
+        ===================================================== */
+
+        @media (max-width: 850px) {
+
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+
+        }
+
+
+        @media (max-width: 600px) {
+
+            .page {
+                padding: 20px 14px 40px;
+            }
+
+            .header {
+                padding: 28px 18px;
+            }
+
+            .header h1 {
+                font-size: 28px;
+            }
+
+            .button-row {
+                grid-template-columns: 1fr;
+            }
+
+            .metrics-grid {
+                grid-template-columns:
+                    repeat(2, minmax(0,1fr));
+            }
+
+            .result-header {
+                align-items: flex-start;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="page">
+
+    <div class="container">
+
+
+        <!-- BACK -->
+
+        <a
+            href="/"
+            class="back-button">
+
+            ← Back to Dashboard
+
+        </a>
+
+
+        <!-- HEADER -->
+
+        <section class="header">
+
+            <div class="header-icon">
+                💊
+            </div>
+
+            <h1>
+                Tablet Quality Control
+            </h1>
+
+            <p>
+                AI-powered visual tablet inspection
+                using Computer Vision and Deep Learning
+            </p>
+
+        </section>
+
+
+        <!-- MAIN -->
+
+        <div class="main-grid">
+
+
+            <!-- LEFT CAMERA -->
+
+            <div>
+
+
+                <div class="card">
+
+                    <h2 class="card-title">
+                        📷 Tablet Inspection Camera
+                    </h2>
+
+                    <p class="card-subtitle">
+                        Place one tablet in front of the
+                        camera and capture an image for
+                        automated quality analysis.
+                    </p>
+
+
+                    <!-- CAMERA -->
+
+                    <div
+                        class="camera-wrapper"
+                        id="cameraWrapper">
+
+
+                        <video
+                            id="video"
+                            autoplay
+                            playsinline>
+                        </video>
+
+
+                        <div
+                            id="cameraPlaceholder"
+                            class="camera-placeholder">
+
+                            <div
+                                class="camera-placeholder-icon">
+
+                                📷
+
+                            </div>
+
+                            <strong>
+                                Camera not started
+                            </strong>
+
+                            <span>
+                                Click "Start Camera" to begin
+                            </span>
+
+                        </div>
+
+
+                        <!-- DETECTION -->
+
+                        <div
+                            id="detectionBox">
+
+                            <div class="detection-label">
+                                Tablet detected
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+
+                    <!-- STATUS -->
+
+                    <div class="camera-status">
+
+                        <span
+                            id="statusDot"
+                            class="status-dot">
+                        </span>
+
+                        <span id="cameraStatus">
+                            Camera is not active
+                        </span>
+
+                    </div>
+
+
+                    <!-- BUTTONS -->
+
+                    <div class="button-row">
+
+                        <button
+                            id="startCameraButton"
+                            class="action-button start-button"
+                            onclick="startCamera()">
+
+                            📷 Start Camera
+
+                        </button>
+
+
+                        <button
+                            id="analyseButton"
+                            class="action-button analyse-button"
+                            onclick="captureAndAnalyse()"
+                            disabled>
+
+                            🔍 Capture & Analyse
+
+                        </button>
+
+                    </div>
+
+
+                    <canvas
+                        id="canvas">
+                    </canvas>
+
+
+                </div>
+
+
+                <!-- RESULT -->
+
+                <div
+                    id="resultCard"
+                    class="result-card">
+
+
+                    <div
+                        id="resultHeader"
+                        class="result-header">
+
+
+                        <div
+                            id="resultIcon"
+                            class="result-icon">
+
+                            🔬
+
+                        </div>
+
+
+                        <div class="result-heading">
+
+                            <h2
+                                id="resultTitle">
+
+                                Inspection Result
+
+                            </h2>
+
+                            <p
+                                id="resultMessage">
+
+                                Waiting for analysis
+
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="result-body">
+
+
+                        <!-- CONFIDENCE -->
+
+                        <div
+                            id="confidenceBox"
+                            class="confidence-box">
+
+                            <div class="confidence-top">
+
+                                <span
+                                    class="confidence-label">
+
+                                    AI Confidence
+
+                                </span>
+
+                                <span
+                                    id="confidenceValue"
+                                    class="confidence-value">
+
+                                    0%
+
+                                </span>
+
+                            </div>
+
+
+                            <div class="progress">
+
+                                <div
+                                    id="confidenceBar"
+                                    class="progress-bar">
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- METRICS -->
+
+                        <h3 class="section-title">
+
+                            📊 Computer Vision Metrics
+
+                        </h3>
+
+
+                        <div class="metrics-grid">
+
+
+                            <div class="metric">
+
+                                <span class="metric-label">
+                                    Detection
+                                </span>
+
+                                <span
+                                    id="metricDetection"
+                                    class="metric-value">
+
+                                    —
+
+                                </span>
+
+                            </div>
+
+
+                            <div class="metric">
+
+                                <span class="metric-label">
+                                    Area Ratio
+                                </span>
+
+                                <span
+                                    id="metricArea"
+                                    class="metric-value">
+
+                                    —
+
+                                </span>
+
+                            </div>
+
+
+                            <div class="metric">
+
+                                <span class="metric-label">
+                                    Aspect Ratio
+                                </span>
+
+                                <span
+                                    id="metricAspect"
+                                    class="metric-value">
+
+                                    —
+
+                                </span>
+
+                            </div>
+
+
+                            <div class="metric">
+
+                                <span class="metric-label">
+                                    Circularity
+                                </span>
+
+                                <span
+                                    id="metricCircularity"
+                                    class="metric-value">
+
+                                    —
+
+                                </span>
+
+                            </div>
+
+
+                            <div class="metric">
+
+                                <span class="metric-label">
+                                    Brightness
+                                </span>
+
+                                <span
+                                    id="metricBrightness"
+                                    class="metric-value">
+
+                                    —
+
+                                </span>
+
+                            </div>
+
+
+                            <div class="metric">
+
+                                <span class="metric-label">
+                                    Sharpness
+                                </span>
+
+                                <span
+                                    id="metricSharpness"
+                                    class="metric-value">
+
+                                    —
+
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- REASONS -->
+
+                        <div
+                            id="reasonBox"
+                            class="reason-box">
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+
+                <!-- DISCLAIMER -->
+
+                <div class="disclaimer">
+
+                    ⚠️ <strong>Educational Prototype:</strong>
+                    This tablet inspection system is an
+                    AI/computer-vision demonstration and is
+                    not validated for pharmaceutical
+                    manufacturing or regulatory quality
+                    control.
+
+                </div>
+
+
+            </div>
+
+
+            <!-- RIGHT INFO -->
+
+            <div class="card">
+
+                <h2 class="card-title">
+                    🤖 AI Inspection
+                </h2>
+
+                <p class="card-subtitle">
+                    The system combines computer vision
+                    with a trained deep-learning model.
+                </p>
+
+
+                <!-- INFO 1 -->
+
+                <div class="info-item">
+
+                    <div class="info-icon">
+                        👁️
+                    </div>
+
+                    <div>
+
+                        <h3>
+                            Tablet Detection
+                        </h3>
+
+                        <p>
+                            OpenCV identifies the
+                            tablet-like object and
+                            calculates its geometry.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- INFO 2 -->
+
+                <div class="info-item">
+
+                    <div class="info-icon">
+                        🧠
+                    </div>
+
+                    <div>
+
+                        <h3>
+                            Deep Learning
+                        </h3>
+
+                        <p>
+                            MobileNetV2 analyses the
+                            cropped tablet image and
+                            predicts Normal or Defective.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- INFO 3 -->
+
+                <div class="info-item">
+
+                    <div class="info-icon">
+                        📊
+                    </div>
+
+                    <div>
+
+                        <h3>
+                            Visual Quality
+                        </h3>
+
+                        <p>
+                            Brightness, sharpness,
+                            circularity and shape are
+                            also evaluated.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- PIPELINE -->
+
+                <div class="pipeline">
+
+                    <h3 class="pipeline-title">
+                        🔬 Inspection Pipeline
+                    </h3>
+
+
+                    <div class="pipeline-step">
+
+                        <span
+                            class="pipeline-number">
+                            1
+                        </span>
+
+                        Capture Image
+
+                    </div>
+
+
+                    <div class="pipeline-step">
+
+                        <span
+                            class="pipeline-number">
+                            2
+                        </span>
+
+                        Detect Tablet
+
+                    </div>
+
+
+                    <div class="pipeline-step">
+
+                        <span
+                            class="pipeline-number">
+                            3
+                        </span>
+
+                        Crop Tablet
+
+                    </div>
+
+
+                    <div class="pipeline-step">
+
+                        <span
+                            class="pipeline-number">
+                            4
+                        </span>
+
+                        AI Prediction
+
+                    </div>
+
+
+                    <div class="pipeline-step">
+
+                        <span
+                            class="pipeline-number">
+                            5
+                        </span>
+
+                        Generate Report
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+
+let stream = null;
+
+
+/* =====================================================
+   START CAMERA
+===================================================== */
+
+async function startCamera() {
+
+    const video =
+        document.getElementById("video");
+
+
+    const placeholder =
+        document.getElementById(
+            "cameraPlaceholder"
+        );
+
+
+    const analyseButton =
+        document.getElementById(
+            "analyseButton"
+        );
+
+
+    const status =
+        document.getElementById(
+            "cameraStatus"
+        );
+
+
+    const statusDot =
+        document.getElementById(
+            "statusDot"
+        );
+
+
+    try {
+
+        stream =
+            await navigator.mediaDevices.getUserMedia({
+
+                video: {
+                    facingMode: "environment"
+                },
+
+                audio: false
+
+            });
+
+
+        video.srcObject =
+            stream;
+
+
+        placeholder.style.display =
+            "none";
+
+
+        analyseButton.disabled =
+            false;
+
+
+        status.innerText =
+            "Camera is active — place one tablet inside the frame";
+
+
+        statusDot.classList.add(
+            "active"
+        );
+
+
+    }
+
+    catch (error) {
+
+        console.error(error);
+
+
+        alert(
+            "Camera access failed. Please allow camera permission."
+        );
+
+
+        status.innerText =
+            "Camera permission required";
+
+    }
+
+}
+
+
+/* =====================================================
+   CAPTURE + ANALYSE
+===================================================== */
+
+async function captureAndAnalyse() {
+
+
+    const video =
+        document.getElementById("video");
+
+
+    const canvas =
+        document.getElementById("canvas");
+
+
+    const resultCard =
+        document.getElementById(
+            "resultCard"
+        );
+
+
+    const width =
+        video.videoWidth;
+
+
+    const height =
+        video.videoHeight;
+
+
+    if (!width || !height) {
+
+        alert(
+            "Please start the camera first."
+        );
+
+        return;
+
+    }
+
+
+    canvas.width =
+        width;
+
+
+    canvas.height =
+        height;
+
+
+    const context =
+        canvas.getContext("2d");
+
+
+    context.drawImage(
+        video,
+        0,
+        0,
+        width,
+        height
+    );
+
+
+    const image =
+        canvas.toDataURL(
+            "image/jpeg",
+            0.9
+        );
+
+
+    resultCard.style.display =
+        "none";
+
+
+    try {
+
+
+        const response =
+            await fetch(
+                "/api/inspect-tablet",
+                {
+
+                    method: "POST",
+
+                    headers: {
+
+                        "Content-Type":
+                            "application/json"
+
+                    },
+
+                    body: JSON.stringify({
+
+                        image: image
+
+                    })
+
+                }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                data.error ||
+                "Tablet inspection failed."
+            );
+
+        }
+
+
+        showInspectionResult(
+            data
+        );
+
+
+    }
+
+    catch (error) {
+
+        console.error(error);
+
+        alert(
+            error.message
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   SHOW RESULT
+===================================================== */
+
+function showInspectionResult(
+    data
+) {
+
+
+    const resultCard =
+        document.getElementById(
+            "resultCard"
+        );
+
+
+    const resultIcon =
+        document.getElementById(
+            "resultIcon"
+        );
+
+
+    const resultTitle =
+        document.getElementById(
+            "resultTitle"
+        );
+
+
+    const resultMessage =
+        document.getElementById(
+            "resultMessage"
+        );
+
+
+    const confidenceValue =
+        document.getElementById(
+            "confidenceValue"
+        );
+
+
+    const confidenceBar =
+        document.getElementById(
+            "confidenceBar"
+        );
+
+
+    const detection =
+        document.getElementById(
+            "metricDetection"
+        );
+
+
+    const area =
+        document.getElementById(
+            "metricArea"
+        );
+
+
+    const aspect =
+        document.getElementById(
+            "metricAspect"
+        );
+
+
+    const circularity =
+        document.getElementById(
+            "metricCircularity"
+        );
+
+
+    const brightness =
+        document.getElementById(
+            "metricBrightness"
+        );
+
+
+    const sharpness =
+        document.getElementById(
+            "metricSharpness"
+        );
+
+
+    const reasonBox =
+        document.getElementById(
+            "reasonBox"
+        );
+
+
+    /* =================================================
+       RESET
+    ================================================= */
+
+    resultCard.className =
+        "result-card";
+
+
+    /* =================================================
+       RESULT TYPE
+    ================================================= */
+
+    const aiStatus =
+        data.ai_status;
+
+
+    if (
+        aiStatus ===
+        "NORMAL"
+    ) {
+
+        resultCard.classList.add(
+            "result-normal"
+        );
+
+        resultIcon.innerText =
+            "🟢";
+
+        resultTitle.innerText =
+            "Tablet Quality: NORMAL";
+
+        resultMessage.innerText =
+            "The AI model classified the detected tablet as normal.";
+
+    }
+
+    else if (
+        aiStatus ===
+        "DEFECTIVE"
+    ) {
+
+        resultCard.classList.add(
+            "result-defective"
+        );
+
+        resultIcon.innerText =
+            "🔴";
+
+        resultTitle.innerText =
+            "Tablet Quality: DEFECTIVE";
+
+        resultMessage.innerText =
+            "The AI model detected visual characteristics associated with a defective sample.";
+
+    }
+
+    else if (
+        data.result ===
+        "NO_TABLET"
+    ) {
+
+        resultCard.classList.add(
+            "result-no-tablet"
+        );
+
+        resultIcon.innerText =
+            "⚪";
+
+        resultTitle.innerText =
+            "No Tablet Detected";
+
+        resultMessage.innerText =
+            data.message ||
+            "No tablet-like object was detected.";
+
+    }
+
+    else {
+
+        resultCard.classList.add(
+            "result-review"
+        );
+
+        resultIcon.innerText =
+            "🟡";
+
+        resultTitle.innerText =
+            "Manual Review Required";
+
+        resultMessage.innerText =
+            data.message ||
+            "The image requires further review.";
+
+    }
+
+
+    /* =================================================
+       CONFIDENCE
+    ================================================= */
+
+    const confidence =
+        Number(
+            data.ai_confidence || 0
+        );
+
+
+    confidenceValue.innerText =
+        confidence.toFixed(2) +
+        "%";
+
+
+    confidenceBar.style.width =
+        Math.min(
+            confidence,
+            100
+        ) + "%";
+
+
+    /* =================================================
+       METRICS
+    ================================================= */
+
+    if (
+        data.result ===
+        "NO_TABLET"
+    ) {
+
+        detection.innerText =
+            "Not detected";
+
+        area.innerText =
+            "—";
+
+        aspect.innerText =
+            "—";
+
+        circularity.innerText =
+            "—";
+
+    }
+
+    else {
+
+        detection.innerText =
+            "Detected";
+
+        area.innerText =
+            data.area_ratio !== undefined
+                ? data.area_ratio + "%"
+                : "—";
+
+        aspect.innerText =
+            data.aspect_ratio !== undefined
+                ? data.aspect_ratio
+                : "—";
+
+        circularity.innerText =
+            data.circularity !== undefined
+                ? data.circularity
+                : "—";
+
+    }
+
+
+    brightness.innerText =
+        data.brightness !== undefined
+            ? data.brightness
+            : "—";
+
+
+    sharpness.innerText =
+        data.sharpness !== undefined
+            ? data.sharpness
+            : "—";
+
+
+    /* =================================================
+       REASONS
+    ================================================= */
+
+    if (
+        data.reasons &&
+        data.reasons.length > 0
+    ) {
+
+        reasonBox.style.display =
+            "block";
+
+
+        reasonBox.innerHTML =
+            "⚠️ <strong>Review reasons:</strong><br>" +
+            data.reasons
+                .map(
+                    reason =>
+                        "• " +
+                        escapeHtml(reason)
+                )
+                .join("<br>");
+
+    }
+
+    else {
+
+        reasonBox.style.display =
+            "none";
+
+        reasonBox.innerHTML =
+            "";
+
+    }
+
+
+    /* =================================================
+       DETECTION BOX
+    ================================================= */
+
+    drawDetectionBox(
+        data
+    );
+
+
+    resultCard.style.display =
+        "block";
+
+
+    resultCard.scrollIntoView({
+        behavior: "smooth",
+        block: "nearest"
+    });
+
+}
+
+
+/* =====================================================
+   DRAW DETECTION BOX
+===================================================== */
+
+function drawDetectionBox(
+    data
+) {
+
+
+    const box =
+        document.getElementById(
+            "detectionBox"
+        );
+
+
+    const wrapper =
+        document.getElementById(
+            "cameraWrapper"
+        );
+
+
+    const video =
+        document.getElementById(
+            "video"
+        );
+
+
+    if (
+        data.x === undefined ||
+        data.y === undefined ||
+        data.width === undefined ||
+        data.height === undefined
+    ) {
+
+        box.style.display =
+            "none";
+
+        return;
+
+    }
+
+
+    if (
+        !data.image_width ||
+        !data.image_height
+    ) {
+
+        box.style.display =
+            "none";
+
+        return;
+
+    }
+
+
+    const videoWidth =
+        video.clientWidth;
+
+
+    const videoHeight =
+        video.clientHeight;
+
+
+    const scaleX =
+        videoWidth /
+        data.image_width;
+
+
+    const scaleY =
+        videoHeight /
+        data.image_height;
+
+
+    box.style.left =
+        (data.x * scaleX) +
+        "px";
+
+
+    box.style.top =
+        (data.y * scaleY) +
+        "px";
+
+
+    box.style.width =
+        (data.width * scaleX) +
+        "px";
+
+
+    box.style.height =
+        (data.height * scaleY) +
+        "px";
+
+
+    box.style.display =
+        "block";
+
+}
+
+
+/* =====================================================
+   ESCAPE HTML
+===================================================== */
+
+function escapeHtml(
+    value
+) {
+
+    return String(value)
+
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+
+        .replace(
+            /</g,
+            "&lt;"
+        )
+
+        .replace(
+            />/g,
+            "&gt;"
+        )
+
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+
+        .replace(
+            /'/g,
+            "&#039;"
+        );
+
+}
+
+
+/* =====================================================
+   STOP CAMERA WHEN PAGE CLOSES
+===================================================== */
+
+window.addEventListener(
+    "beforeunload",
+    function() {
+
+        if (stream) {
+
+            stream
+                .getTracks()
+                .forEach(
+                    track =>
+                        track.stop()
+                );
+
+        }
+
+    }
+);
+
+</script>
+
+
+</body>
+
+</html>

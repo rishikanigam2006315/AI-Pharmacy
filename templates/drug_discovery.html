@@ -1,0 +1,1210 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>AI Drug Discovery</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+    <style>
+
+        /* =========================================================
+           AI IN PHARMACY — UNIFIED DARK THEME
+        ========================================================= */
+
+        #drugDiscoveryPage,
+        #drugDiscoveryPage * {
+            box-sizing: border-box;
+        }
+
+        #drugDiscoveryPage {
+            width: 100%;
+            min-height: 100vh;
+            background: #0f172a;
+            padding: 35px 20px 60px;
+            overflow-x: hidden;
+            font-family: Arial, sans-serif;
+            color: #f8fafc;
+        }
+
+        #drugDiscoveryPage .drug-container {
+            width: min(1150px, 100%);
+            margin: 0 auto;
+        }
+
+
+        /* ================= BACK BUTTON ================= */
+
+        #drugDiscoveryPage .drug-back {
+            display: inline-flex !important;
+            align-items: center;
+            gap: 8px;
+
+            margin-bottom: 22px;
+
+            color: #93c5fd !important;
+            text-decoration: none !important;
+
+            font-size: 16px;
+            font-weight: 700;
+
+            transition: 0.2s ease;
+        }
+
+        #drugDiscoveryPage .drug-back:hover {
+            color: #bfdbfe !important;
+            transform: translateX(-2px);
+        }
+
+
+        /* ================= HEADER ================= */
+
+        #drugDiscoveryPage .drug-header {
+            background: #1e293b;
+
+            border: 1px solid #334155;
+            border-radius: 24px;
+
+            padding: 38px 30px;
+
+            text-align: center;
+            color: white;
+
+            box-shadow:
+                0 15px 35px rgba(0, 0, 0, 0.22);
+
+            margin-bottom: 25px;
+        }
+
+        #drugDiscoveryPage .drug-header-icon {
+            font-size: 42px;
+            margin-bottom: 8px;
+        }
+
+        #drugDiscoveryPage .drug-header h1 {
+            margin: 0 !important;
+
+            font-size: 34px;
+            font-weight: 800;
+
+            color: #f8fafc !important;
+        }
+
+        #drugDiscoveryPage .drug-header p {
+            margin: 10px 0 0 !important;
+
+            font-size: 16px;
+
+            color: #94a3b8 !important;
+        }
+
+
+        /* ================= SEARCH PANEL ================= */
+
+        #drugDiscoveryPage .drug-search-panel {
+            background: #1e293b;
+
+            border: 1px solid #334155;
+            border-radius: 20px;
+
+            padding: 26px;
+
+            box-shadow:
+                0 10px 30px rgba(0, 0, 0, 0.20);
+
+            margin-bottom: 28px;
+        }
+
+        #drugDiscoveryPage .drug-label {
+            display: block !important;
+
+            margin-bottom: 10px !important;
+
+            color: #e2e8f0 !important;
+
+            font-size: 15px;
+            font-weight: 700;
+        }
+
+        #drugDiscoveryPage .drug-search-row {
+            display: grid !important;
+
+            grid-template-columns:
+                minmax(0, 1fr)
+                minmax(0, 1fr)
+                auto;
+
+            gap: 14px;
+
+            width: 100%;
+        }
+
+
+        /* ================= DROPDOWN ================= */
+
+        #drugDiscoveryPage .drug-select {
+            width: 100% !important;
+
+            height: 54px;
+
+            padding: 0 16px !important;
+
+            border: 1px solid #475569 !important;
+
+            border-radius: 12px !important;
+
+            background: #0f172a !important;
+
+            color: #f8fafc !important;
+
+            font-size: 16px !important;
+
+            outline: none;
+        }
+
+        #drugDiscoveryPage .drug-select:focus {
+            border-color: #3b82f6 !important;
+
+            box-shadow:
+                0 0 0 3px rgba(59, 130, 246, 0.15);
+        }
+
+
+        /* ================= BUTTON ================= */
+
+        #drugDiscoveryPage .drug-button {
+            height: 54px;
+
+            padding: 0 25px !important;
+
+            border: none !important;
+
+            border-radius: 12px !important;
+
+            background: #2563eb !important;
+
+            color: white !important;
+
+            font-size: 15px !important;
+            font-weight: 700;
+
+            cursor: pointer;
+
+            white-space: nowrap;
+
+            box-shadow:
+                0 8px 18px rgba(37, 99, 235, 0.25);
+
+            transition: 0.2s ease;
+        }
+
+        #drugDiscoveryPage .drug-button:hover {
+            transform: translateY(-1px);
+
+            background: #3b82f6 !important;
+
+            box-shadow:
+                0 12px 24px rgba(37, 99, 235, 0.30);
+        }
+
+
+        /* ================= LOADING ================= */
+
+        #drugDiscoveryPage #drugLoading {
+            display: none;
+
+            background: #1e293b;
+
+            border: 1px solid #334155;
+
+            border-radius: 14px;
+
+            padding: 18px;
+
+            text-align: center;
+
+            color: #93c5fd;
+
+            font-weight: 700;
+
+            margin-bottom: 22px;
+        }
+
+
+        /* ================= ERROR ================= */
+
+        #drugDiscoveryPage #drugError {
+            display: none;
+
+            background: #3f1d24;
+
+            border: 1px solid #7f1d1d;
+
+            color: #fecaca;
+
+            padding: 15px 18px;
+
+            border-radius: 12px;
+
+            margin-bottom: 22px;
+
+            font-weight: 600;
+        }
+
+
+        /* ================= RESULTS HEADER ================= */
+
+        #drugDiscoveryPage .results-heading {
+            display: none;
+
+            align-items: center;
+            justify-content: space-between;
+
+            margin: 10px 0 18px;
+        }
+
+        #drugDiscoveryPage .results-heading h2 {
+            margin: 0 !important;
+
+            font-size: 22px;
+
+            color: #f8fafc !important;
+        }
+
+        #drugDiscoveryPage .results-count {
+            background: #172554;
+
+            color: #93c5fd;
+
+            border: 1px solid #1d4ed8;
+
+            padding: 7px 12px;
+
+            border-radius: 20px;
+
+            font-size: 13px;
+
+            font-weight: 700;
+        }
+
+
+        /* ================= CANDIDATE GRID ================= */
+
+        #drugDiscoveryPage #candidateResults {
+            display: grid !important;
+
+            grid-template-columns:
+                repeat(2, minmax(0, 1fr));
+
+            gap: 22px;
+
+            width: 100%;
+
+            min-width: 0;
+
+            overflow: visible;
+        }
+
+
+        /* ================= DRUG CARD ================= */
+
+        #drugDiscoveryPage .drug-card {
+            display: block !important;
+
+            position: relative !important;
+
+            width: 100% !important;
+
+            min-width: 0 !important;
+
+            max-width: 100% !important;
+
+            min-height: 330px;
+
+            background: #1e293b !important;
+
+            border: 1px solid #334155 !important;
+
+            border-left: 4px solid #3b82f6 !important;
+
+            border-radius: 18px !important;
+
+            padding: 23px !important;
+
+            box-shadow:
+                0 8px 25px rgba(0, 0, 0, 0.18);
+
+            overflow: hidden !important;
+
+            transition: 0.2s ease;
+        }
+
+        #drugDiscoveryPage .drug-card:hover {
+            transform: translateY(-3px);
+
+            border-color: #475569 !important;
+
+            border-left-color: #60a5fa !important;
+
+            box-shadow:
+                0 14px 32px rgba(0, 0, 0, 0.25);
+        }
+
+
+        /* ================= CARD TOP ================= */
+
+        #drugDiscoveryPage .drug-card-top {
+            display: flex !important;
+
+            align-items: flex-start;
+
+            justify-content: space-between;
+
+            gap: 12px;
+
+            margin-bottom: 18px;
+        }
+
+        #drugDiscoveryPage .drug-name {
+            display: block !important;
+
+            margin: 0 !important;
+
+            color: #f8fafc !important;
+
+            font-size: 21px !important;
+
+            line-height: 1.3;
+
+            font-weight: 800;
+        }
+
+
+        /* ================= PUBCHEM BADGE ================= */
+
+        #drugDiscoveryPage .pubchem-badge {
+            display: inline-flex !important;
+
+            align-items: center;
+
+            gap: 5px;
+
+            flex-shrink: 0;
+
+            background: #172554 !important;
+
+            border: 1px solid #1d4ed8;
+
+            color: #93c5fd !important;
+
+            padding: 7px 10px !important;
+
+            border-radius: 20px !important;
+
+            font-size: 11px !important;
+
+            font-weight: 800;
+        }
+
+
+        /* ================= INFO GRID ================= */
+
+        #drugDiscoveryPage .drug-info-grid {
+            display: grid !important;
+
+            grid-template-columns:
+                repeat(2, minmax(0, 1fr));
+
+            gap: 12px;
+
+            margin-bottom: 18px;
+        }
+
+        #drugDiscoveryPage .drug-info-box {
+            display: block !important;
+
+            min-width: 0;
+
+            background: #0f172a !important;
+
+            border: 1px solid #334155 !important;
+
+            border-radius: 11px !important;
+
+            padding: 11px 12px !important;
+        }
+
+        #drugDiscoveryPage .drug-info-label {
+            display: block !important;
+
+            margin-bottom: 4px !important;
+
+            color: #94a3b8 !important;
+
+            font-size: 11px !important;
+
+            font-weight: 700 !important;
+
+            text-transform: uppercase;
+        }
+
+        #drugDiscoveryPage .drug-info-value {
+            display: block !important;
+
+            color: #e2e8f0 !important;
+
+            font-size: 14px !important;
+
+            font-weight: 700 !important;
+
+            overflow-wrap: anywhere;
+        }
+
+
+        /* ================= TARGET ================= */
+
+        #drugDiscoveryPage .drug-target {
+            display: flex !important;
+
+            align-items: center;
+
+            gap: 8px;
+
+            margin-bottom: 17px;
+
+            color: #94a3b8 !important;
+
+            font-size: 13px !important;
+        }
+
+        #drugDiscoveryPage .drug-target strong {
+            color: #cbd5e1 !important;
+        }
+
+
+        /* ================= SMILES ================= */
+
+        #drugDiscoveryPage .smiles-section {
+            display: block !important;
+
+            margin-top: 5px;
+        }
+
+        #drugDiscoveryPage .smiles-title {
+            display: block !important;
+
+            margin-bottom: 7px !important;
+
+            color: #94a3b8 !important;
+
+            font-size: 12px !important;
+
+            font-weight: 800 !important;
+        }
+
+        #drugDiscoveryPage .smiles-box {
+            display: block !important;
+
+            width: 100% !important;
+
+            max-width: 100% !important;
+
+            background: #020617 !important;
+
+            border: 1px solid #334155;
+
+            color: #93c5fd !important;
+
+            padding: 11px 12px !important;
+
+            border-radius: 9px !important;
+
+            font-family: monospace !important;
+
+            font-size: 11px !important;
+
+            line-height: 1.5;
+
+            overflow-wrap: anywhere !important;
+
+            word-break: break-word !important;
+
+            white-space: normal !important;
+
+            max-height: 65px;
+
+            overflow-y: auto !important;
+
+            overflow-x: hidden !important;
+        }
+
+
+        /* ================= EMPTY ================= */
+
+        #drugDiscoveryPage .drug-empty {
+            grid-column: 1 / -1;
+
+            background: #1e293b;
+
+            padding: 35px;
+
+            border-radius: 16px;
+
+            text-align: center;
+
+            color: #94a3b8;
+
+            border: 1px solid #334155;
+        }
+
+
+        /* ================= MOBILE ================= */
+
+        @media (max-width: 800px) {
+
+            #drugDiscoveryPage #candidateResults {
+                grid-template-columns: 1fr !important;
+            }
+
+        }
+
+        @media (max-width: 600px) {
+
+            #drugDiscoveryPage {
+                padding: 20px 14px 40px;
+            }
+
+            #drugDiscoveryPage .drug-header {
+                padding: 28px 18px;
+            }
+
+            #drugDiscoveryPage .drug-header h1 {
+                font-size: 27px;
+            }
+
+            #drugDiscoveryPage .drug-search-row {
+                grid-template-columns: 1fr !important;
+            }
+
+            #drugDiscoveryPage .drug-button {
+                width: 100%;
+            }
+
+            #drugDiscoveryPage .drug-info-grid {
+                grid-template-columns: 1fr !important;
+            }
+
+            #drugDiscoveryPage .drug-card {
+                padding: 18px !important;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+<div id="drugDiscoveryPage">
+
+    <div class="drug-container">
+
+
+        <!-- BACK -->
+
+        <a href="/" class="drug-back">
+            ← Back to Dashboard
+        </a>
+
+
+        <!-- HEADER -->
+
+        <section class="drug-header">
+
+            <div class="drug-header-icon">
+                🔬
+            </div>
+
+            <h1>
+                AI Drug Discovery
+            </h1>
+
+            <p>
+                Explore molecular candidates using
+                real PubChem chemical data
+            </p>
+
+        </section>
+
+
+        <!-- SEARCH -->
+
+        <section class="drug-search-panel">
+
+            <label class="drug-label">
+                Select Disease & Target
+            </label>
+
+
+            <div class="drug-search-row">
+
+
+                <!-- DISEASE -->
+
+                <select
+                    id="disease"
+                    class="drug-select"
+                    onchange="updateTargets()">
+
+                    <option value="Cancer">
+                        Cancer
+                    </option>
+
+                    <option value="Diabetes">
+                        Diabetes
+                    </option>
+
+                    <option value="Alzheimer">
+                        Alzheimer's Disease
+                    </option>
+
+                    <option value="Hypertension">
+                        Hypertension
+                    </option>
+
+                </select>
+
+
+                <!-- TARGET -->
+
+                <select
+                    id="target"
+                    class="drug-select">
+
+                </select>
+
+
+                <!-- BUTTON -->
+
+                <button
+                    type="button"
+                    class="drug-button"
+                    onclick="screenDrugs()">
+
+                    🧬 Screen Candidates
+
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <!-- LOADING -->
+
+        <div id="drugLoading">
+
+            🔄 Fetching molecular information from PubChem...
+
+        </div>
+
+
+        <!-- ERROR -->
+
+        <div id="drugError"></div>
+
+
+        <!-- RESULTS TITLE -->
+
+        <div
+            id="resultsHeading"
+            class="results-heading">
+
+            <h2>
+                🧬 Drug Candidates
+            </h2>
+
+            <span
+                id="resultsCount"
+                class="results-count">
+
+                0 candidates
+
+            </span>
+
+        </div>
+
+
+        <!-- RESULTS -->
+
+        <div id="candidateResults"></div>
+
+
+    </div>
+
+</div>
+
+
+<script>
+
+
+/* =========================================================
+   DISEASE → TARGET MAPPING
+========================================================= */
+
+const targetMap = {
+
+    Cancer: [
+
+        {
+            value: "EGFR",
+            label: "EGFR"
+        },
+
+        {
+            value: "HER2",
+            label: "HER2"
+        },
+
+        {
+            value: "VEGFR",
+            label: "VEGFR"
+        }
+
+    ],
+
+
+    Diabetes: [
+
+        {
+            value: "DPP-4",
+            label: "DPP-4"
+        },
+
+        {
+            value: "PPAR-gamma",
+            label: "PPAR-γ"
+        },
+
+        {
+            value: "Sulfonylurea receptor",
+            label: "Sulfonylurea receptor"
+        }
+
+    ],
+
+
+    Alzheimer: [
+
+        {
+            value: "Acetylcholinesterase",
+            label: "Acetylcholinesterase"
+        },
+
+        {
+            value: "NMDA receptor",
+            label: "NMDA receptor"
+        },
+
+        {
+            value: "Muscarinic receptor",
+            label: "Muscarinic receptor"
+        }
+
+    ],
+
+
+    Hypertension: [
+
+        {
+            value: "ACE",
+            label: "ACE"
+        },
+
+        {
+            value: "Angiotensin II receptor",
+            label: "Angiotensin II receptor"
+        },
+
+        {
+            value: "Calcium channel",
+            label: "Calcium channel"
+        }
+
+    ]
+
+};
+
+
+/* =========================================================
+   UPDATE TARGET DROPDOWN
+========================================================= */
+
+function updateTargets() {
+
+    const disease =
+        document.getElementById("disease").value;
+
+    const target =
+        document.getElementById("target");
+
+    target.innerHTML = "";
+
+    const targets =
+        targetMap[disease] || [];
+
+
+    targets.forEach(function(item) {
+
+        const option =
+            document.createElement("option");
+
+        option.value =
+            item.value;
+
+        option.textContent =
+            item.label;
+
+        target.appendChild(option);
+
+    });
+
+}
+
+
+/* Load targets when page opens */
+
+updateTargets();
+
+
+/* =========================================================
+   SCREEN DRUGS
+========================================================= */
+
+async function screenDrugs() {
+
+    const disease =
+        document.getElementById("disease").value;
+
+    const target =
+        document.getElementById("target").value;
+
+    const loading =
+        document.getElementById("drugLoading");
+
+    const error =
+        document.getElementById("drugError");
+
+    const results =
+        document.getElementById("candidateResults");
+
+    const heading =
+        document.getElementById("resultsHeading");
+
+
+    /* Validation */
+
+    if (!disease || !target) {
+
+        error.innerText =
+            "❌ Please select disease and target.";
+
+        error.style.display =
+            "block";
+
+        return;
+
+    }
+
+
+    loading.style.display =
+        "block";
+
+    error.style.display =
+        "none";
+
+    heading.style.display =
+        "none";
+
+    results.innerHTML =
+        "";
+
+
+    try {
+
+        const response =
+            await fetch(
+                "/api/screen-drugs",
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body: JSON.stringify({
+
+                        disease: disease,
+
+                        target: target
+
+                    })
+
+                }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                data.error ||
+                "Unable to fetch drug data."
+            );
+
+        }
+
+
+        displayCandidates(data);
+
+    }
+
+
+    catch (err) {
+
+        console.error(err);
+
+        error.innerText =
+            "❌ " + err.message;
+
+        error.style.display =
+            "block";
+
+    }
+
+
+    finally {
+
+        loading.style.display =
+            "none";
+
+    }
+
+}
+
+
+/* =========================================================
+   DISPLAY RESULTS
+========================================================= */
+
+function displayCandidates(data) {
+
+    const container =
+        document.getElementById(
+            "candidateResults"
+        );
+
+    const heading =
+        document.getElementById(
+            "resultsHeading"
+        );
+
+    const count =
+        document.getElementById(
+            "resultsCount"
+        );
+
+
+    container.innerHTML =
+        "";
+
+
+    if (
+        !data.candidates ||
+        data.candidates.length === 0
+    ) {
+
+        container.innerHTML = `
+
+            <div class="drug-empty">
+
+                No compounds found for this disease.
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    heading.style.display =
+        "flex";
+
+
+    count.innerText =
+        `${data.candidates.length} candidate${
+            data.candidates.length !== 1
+                ? "s"
+                : ""
+        }`;
+
+
+    data.candidates.forEach(
+        function(candidate) {
+
+            const card =
+                document.createElement(
+                    "article"
+                );
+
+
+            card.className =
+                "drug-card";
+
+
+            card.innerHTML = `
+
+                <div class="drug-card-top">
+
+                    <h3 class="drug-name">
+
+                        🧬 ${candidate.name}
+
+                    </h3>
+
+
+                    <span class="pubchem-badge">
+
+                        🧪 PubChem
+
+                    </span>
+
+                </div>
+
+
+                <div class="drug-info-grid">
+
+
+                    <div class="drug-info-box">
+
+                        <span class="drug-info-label">
+
+                            PubChem CID
+
+                        </span>
+
+
+                        <span class="drug-info-value">
+
+                            ${candidate.cid || "N/A"}
+
+                        </span>
+
+                    </div>
+
+
+                    <div class="drug-info-box">
+
+                        <span class="drug-info-label">
+
+                            Molecular Formula
+
+                        </span>
+
+
+                        <span class="drug-info-value">
+
+                            ${candidate.formula || "N/A"}
+
+                        </span>
+
+                    </div>
+
+
+                    <div class="drug-info-box">
+
+                        <span class="drug-info-label">
+
+                            Molecular Weight
+
+                        </span>
+
+
+                        <span class="drug-info-value">
+
+                            ${candidate.molecular_weight || "N/A"}
+
+                            g/mol
+
+                        </span>
+
+                    </div>
+
+
+                    <div class="drug-info-box">
+
+                        <span class="drug-info-label">
+
+                            Target
+
+                        </span>
+
+
+                        <span class="drug-info-value">
+
+                            ${candidate.target || "N/A"}
+
+                        </span>
+
+                    </div>
+
+
+                </div>
+
+
+                <div class="smiles-section">
+
+                    <span class="smiles-title">
+
+                        Molecular Structure / SMILES
+
+                    </span>
+
+
+                    <div class="smiles-box">
+
+                        ${candidate.smiles || "N/A"}
+
+                    </div>
+
+                </div>
+
+            `;
+
+
+            container.appendChild(
+                card
+            );
+
+        }
+    );
+
+}
+
+</script>
+
+</body>
+
+</html>
