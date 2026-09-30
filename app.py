@@ -10,7 +10,7 @@ import numpy as np
 import base64
 import tensorflow as tf
 import requests
-from google import genai
+from groq import Groq
 
 app = Flask(__name__)
 
@@ -325,14 +325,20 @@ def screen_drugs():
 
 
 # =========================================================
-# GEMINI AI DRUG DISCOVERY ASSISTANT
+# GROQ AI DRUG DISCOVERY ASSISTANT
 # =========================================================
 
 @app.route("/api/gemini-drug", methods=["POST"])
 def gemini_drug():
+    """
+    Backward-compatible endpoint name so the existing
+    drug_discovery.html continues to work.
+
+    Gemini has been removed from the backend.
+    This endpoint now uses Groq AI.
+    """
 
     try:
-
         data = request.get_json() or {}
         user_query = data.get("query", "").strip()
 
@@ -342,26 +348,23 @@ def gemini_drug():
                 "error": "Please enter your question."
             }), 400
 
-        api_key = os.getenv("GEMINI_API_KEY")
+        api_key = os.getenv("GROQ_API_KEY")
 
         if not api_key:
             return jsonify({
                 "success": False,
-                "error": "Gemini API key is not configured. Set GEMINI_API_KEY first."
+                "error": "Groq API key is not configured. Set GROQ_API_KEY first."
             }), 500
 
-        client = genai.Client(api_key=api_key)
+        client = Groq(api_key=api_key)
 
-        prompt = f"""
+        system_prompt = """
 You are the AI assistant inside an educational exhibition project
 called "AI Pharmacy".
 
-The user is asking about drug discovery, pharmaceutical compounds,
+The user may ask about drug discovery, pharmaceutical compounds,
 molecular targets, diseases, drug mechanisms, medicinal chemistry,
 or related pharmaceutical research.
-
-User question:
-{user_query}
 
 Give a clear, structured educational answer.
 
@@ -373,74 +376,63 @@ When relevant, explain:
 5. Important molecular information
 6. Drug-discovery relevance
 
-Do not claim that you discovered a new drug.
-Do not provide personalized medical advice or treatment instructions.
-Do not tell a specific patient which medicine to take.
-
-If the answer involves factual drug information, make it clear that
-the information should be verified against authoritative sources
-such as PubChem, FDA labeling, or professional medical references.
+Important safety rules:
+- Do not claim that you discovered a new drug.
+- Do not provide personalized medical advice or treatment instructions.
+- Do not tell a specific patient which medicine to take.
+- If the answer involves factual drug information, advise verification
+  against authoritative sources such as PubChem, FDA labeling,
+  or professional medical references.
 """
 
-        # Gemini can temporarily return 503 UNAVAILABLE during
-        # periods of high demand. Try stable Flash models in order.
-        models = [
-            "gemini-3.8-flash",
-            "gemini-3.7-flash",
-            "gemini-3.6-flash",
-            "gemini-3.5-flash"
-        ]
+        completion = client.chat.completions.create(
+            model="openai/gpt-oss-120b",
+            messages=[
+                {
+                    "role": "system",
+                    "content": system_prompt
+                },
+                {
+                    "role": "user",
+                    "content": user_query
+                }
+            ],
+            temperature=0.2
+        )
 
-        response = None
-        last_error = None
-
-        for model_name in models:
-            try:
-                print(f"Trying Gemini model: {model_name}")
-
-                response = client.models.generate_content(
-                    model=model_name,
-                    contents=prompt
-                )
-
-                print(f"Gemini response received from: {model_name}")
-                break
-
-            except Exception as e:
-                last_error = e
-                print(f"Gemini model failed: {model_name} -> {e}")
-
-        if response is None:
-            raise Exception(
-                "All configured Gemini models are currently unavailable. "
-                f"Last error: {last_error}"
-            )
-
-        answer = getattr(response, "text", None)
+        answer = completion.choices[0].message.content
 
         if not answer:
-            answer = "Gemini did not return a text response."
+            answer = "AI did not return a text response."
 
-        add_history("Drug Discovery", "GEMINI_QUERY", {
+        add_history("Drug Discovery", "AI_QUERY", {
             "query": user_query,
-            "source": "Google Gemini"
+            "source": "Groq AI",
+            "model": "openai/gpt-oss-120b"
         })
 
         return jsonify({
             "success": True,
             "query": user_query,
             "answer": answer,
-            "source": "Google Gemini"
+            "source": "Groq AI",
+            "model": "openai/gpt-oss-120b"
         })
 
     except Exception as e:
-
-        print("GEMINI ERROR:", e)
+        print("GROQ AI ERROR:", e)
 
         return jsonify({
             "success": False,
             "error": str(e)
         }), 500
+
+
+# Clean endpoint for the updated frontend.
+# The old endpoint above is kept so the current HTML does not break.
+@app.route("/api/ai-drug", methods=["POST"])
+def ai_drug():
+    return gemini_drug()
 
 
 # =========================================================

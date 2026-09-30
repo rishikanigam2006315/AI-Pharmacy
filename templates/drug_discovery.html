@@ -36,7 +36,6 @@
             margin: 0 auto;
         }
 
-
         /* ================= BACK BUTTON ================= */
 
         #drugDiscoveryPage .drug-back {
@@ -59,7 +58,6 @@
             color: #bfdbfe !important;
             transform: translateX(-2px);
         }
-
 
         /* ================= HEADER ================= */
 
@@ -102,7 +100,6 @@
             color: #94a3b8 !important;
         }
 
-
         /* ================= SEARCH PANEL ================= */
 
         #drugDiscoveryPage .drug-search-panel {
@@ -143,7 +140,6 @@
             width: 100%;
         }
 
-
         /* ================= DROPDOWN ================= */
 
         #drugDiscoveryPage .drug-select {
@@ -172,7 +168,6 @@
             box-shadow:
                 0 0 0 3px rgba(59, 130, 246, 0.15);
         }
-
 
         /* ================= BUTTON ================= */
 
@@ -211,7 +206,6 @@
                 0 12px 24px rgba(37, 99, 235, 0.30);
         }
 
-
         /* ================= LOADING ================= */
 
         #drugDiscoveryPage #drugLoading {
@@ -234,7 +228,6 @@
             margin-bottom: 22px;
         }
 
-
         /* ================= ERROR ================= */
 
         #drugDiscoveryPage #drugError {
@@ -254,7 +247,6 @@
 
             font-weight: 600;
         }
-
 
         /* ================= RESULTS HEADER ================= */
 
@@ -291,7 +283,6 @@
             font-weight: 700;
         }
 
-
         /* ================= CANDIDATE GRID ================= */
 
         #drugDiscoveryPage #candidateResults {
@@ -308,7 +299,6 @@
 
             overflow: visible;
         }
-
 
         /* ================= DRUG CARD ================= */
 
@@ -354,7 +344,6 @@
                 0 14px 32px rgba(0, 0, 0, 0.25);
         }
 
-
         /* ================= CARD TOP ================= */
 
         #drugDiscoveryPage .drug-card-top {
@@ -383,7 +372,6 @@
             font-weight: 800;
         }
 
-
         /* ================= PUBCHEM BADGE ================= */
 
         #drugDiscoveryPage .pubchem-badge {
@@ -409,7 +397,6 @@
 
             font-weight: 800;
         }
-
 
         /* ================= INFO GRID ================= */
 
@@ -464,7 +451,6 @@
             overflow-wrap: anywhere;
         }
 
-
         /* ================= TARGET ================= */
 
         #drugDiscoveryPage .drug-target {
@@ -484,7 +470,6 @@
         #drugDiscoveryPage .drug-target strong {
             color: #cbd5e1 !important;
         }
-
 
         /* ================= SMILES ================= */
 
@@ -542,7 +527,6 @@
             overflow-x: hidden !important;
         }
 
-
         /* ================= EMPTY ================= */
 
         #drugDiscoveryPage .drug-empty {
@@ -560,7 +544,6 @@
 
             border: 1px solid #334155;
         }
-
 
         /* ================= MOBILE ================= */
 
@@ -603,308 +586,290 @@
             }
 
         }
+
         /* =========================================================
-   GEMINI AI SEARCH
-========================================================= */
+           GROQ AI SEARCH
+        ========================================================= */
 
-#drugDiscoveryPage .drug-helper-text {
+        #drugDiscoveryPage .drug-helper-text {
 
-    margin: -4px 0 18px;
+            margin: -4px 0 18px;
 
-    color: #64748b;
+            color: #64748b;
 
-    font-size: 14px;
+            font-size: 14px;
 
-    line-height: 1.6;
-}
+            line-height: 1.6;
+        }
 
+        #drugDiscoveryPage .gemini-search-row {
 
-#drugDiscoveryPage .gemini-search-row {
+            display: grid;
 
-    display: grid;
+            grid-template-columns:
+                minmax(0, 1fr)
+                auto;
 
-    grid-template-columns:
-        minmax(0, 1fr)
-        auto;
+            gap: 12px;
 
-    gap: 12px;
+            width: 100%;
+        }
 
-    width: 100%;
-}
+        #drugDiscoveryPage .gemini-input {
 
+            width: 100%;
 
-#drugDiscoveryPage .gemini-input {
+            height: 56px;
 
-    width: 100%;
+            padding: 0 18px;
 
-    height: 56px;
+            border: 1px solid #d8dee9;
 
-    padding: 0 18px;
+            border-radius: 12px;
 
-    border: 1px solid #d8dee9;
+            background: #111827;
 
-    border-radius: 12px;
+            color: white;
 
-    background: #111827;
+            font-size: 16px;
 
-    color: white;
+            outline: none;
 
-    font-size: 16px;
+            transition: 0.2s ease;
+        }
 
-    outline: none;
+        #drugDiscoveryPage .gemini-input::placeholder {
 
-    transition: 0.2s ease;
-}
+            color: #94a3b8;
+        }
 
+        #drugDiscoveryPage .gemini-input:focus {
 
-#drugDiscoveryPage .gemini-input::placeholder {
+            border-color: #7c3aed;
 
-    color: #94a3b8;
-}
+            box-shadow:
+                0 0 0 3px rgba(124,58,237,0.12);
+        }
 
+        /* EXAMPLE QUESTIONS */
 
-#drugDiscoveryPage .gemini-input:focus {
+        #drugDiscoveryPage .example-queries {
 
-    border-color: #7c3aed;
+            display: flex;
 
-    box-shadow:
-        0 0 0 3px rgba(124,58,237,0.12);
-}
+            flex-wrap: wrap;
 
+            gap: 8px;
 
-/* EXAMPLE QUESTIONS */
+            margin-top: 14px;
+        }
 
-#drugDiscoveryPage .example-queries {
+        #drugDiscoveryPage .example-queries button {
 
-    display: flex;
+            border: 1px solid #ddd6fe;
 
-    flex-wrap: wrap;
+            background: #f5f3ff;
 
-    gap: 8px;
+            color: #6d28d9;
 
-    margin-top: 14px;
-}
+            border-radius: 20px;
 
+            padding: 8px 13px;
 
-#drugDiscoveryPage .example-queries button {
+            font-size: 12px;
 
-    border: 1px solid #ddd6fe;
+            font-weight: 700;
 
-    background: #f5f3ff;
+            cursor: pointer;
 
-    color: #6d28d9;
+            transition: 0.2s ease;
+        }
 
-    border-radius: 20px;
+        #drugDiscoveryPage .example-queries button:hover {
 
-    padding: 8px 13px;
+            background: #ede9fe;
 
-    font-size: 12px;
+            transform: translateY(-1px);
+        }
 
-    font-weight: 700;
+        /* GROQ LOADING */
 
-    cursor: pointer;
+        #drugDiscoveryPage .gemini-loading {
 
-    transition: 0.2s ease;
-}
+            display: none;
 
+            background: white;
 
-#drugDiscoveryPage .example-queries button:hover {
+            border-radius: 14px;
 
-    background: #ede9fe;
+            padding: 18px;
 
-    transform: translateY(-1px);
-}
+            margin-bottom: 22px;
 
+            text-align: center;
 
-/* GEMINI LOADING */
+            color: #6d28d9;
 
-#drugDiscoveryPage .gemini-loading {
+            font-weight: 700;
 
-    display: none;
+            box-shadow:
+                0 8px 25px rgba(15,23,42,0.07);
+        }
 
-    background: white;
+        /* GROQ ERROR */
 
-    border-radius: 14px;
+        #drugDiscoveryPage .gemini-error {
 
-    padding: 18px;
+            display: none;
 
-    margin-bottom: 22px;
+            background: #fef2f2;
 
-    text-align: center;
+            border: 1px solid #fecaca;
 
-    color: #6d28d9;
+            color: #b91c1c;
 
-    font-weight: 700;
+            padding: 15px 18px;
 
-    box-shadow:
-        0 8px 25px rgba(15,23,42,0.07);
-}
+            border-radius: 12px;
 
+            margin-bottom: 22px;
 
-/* GEMINI ERROR */
+            font-weight: 600;
+        }
 
-#drugDiscoveryPage .gemini-error {
+        /* GROQ RESULT */
 
-    display: none;
+        #drugDiscoveryPage .gemini-result {
 
-    background: #fef2f2;
+            display: none;
 
-    border: 1px solid #fecaca;
+            background: white;
 
-    color: #b91c1c;
+            border-radius: 20px;
 
-    padding: 15px 18px;
+            padding: 24px;
 
-    border-radius: 12px;
+            margin-bottom: 28px;
 
-    margin-bottom: 22px;
+            border: 1px solid #e5e7eb;
 
-    font-weight: 600;
-}
+            border-left: 5px solid #7c3aed;
 
+            box-shadow:
+                0 10px 30px rgba(15,23,42,0.08);
+        }
 
-/* GEMINI RESULT */
+        #drugDiscoveryPage .gemini-result-header {
 
-#drugDiscoveryPage .gemini-result {
+            display: flex;
 
-    display: none;
+            align-items: center;
 
-    background: white;
+            justify-content: space-between;
 
-    border-radius: 20px;
+            gap: 15px;
 
-    padding: 24px;
+            margin-bottom: 20px;
 
-    margin-bottom: 28px;
+            padding-bottom: 15px;
 
-    border: 1px solid #e5e7eb;
+            border-bottom: 1px solid #eef2f7;
+        }
 
-    border-left: 5px solid #7c3aed;
+        #drugDiscoveryPage .gemini-result-header > div {
 
-    box-shadow:
-        0 10px 30px rgba(15,23,42,0.08);
-}
+            display: flex;
 
+            align-items: center;
 
-#drugDiscoveryPage .gemini-result-header {
+            gap: 10px;
+        }
 
-    display: flex;
+        #drugDiscoveryPage .gemini-icon {
 
-    align-items: center;
+            font-size: 26px;
+        }
 
-    justify-content: space-between;
+        #drugDiscoveryPage .gemini-result-header strong {
 
-    gap: 15px;
+            color: #4c1d95;
 
-    margin-bottom: 20px;
+            font-size: 19px;
+        }
 
-    padding-bottom: 15px;
+        #drugDiscoveryPage .gemini-source {
 
-    border-bottom: 1px solid #eef2f7;
-}
+            background: #f0eafe;
 
+            color: #6d28d9;
 
-#drugDiscoveryPage .gemini-result-header > div {
+            padding: 7px 11px;
 
-    display: flex;
+            border-radius: 20px;
 
-    align-items: center;
+            font-size: 11px;
 
-    gap: 10px;
-}
+            font-weight: 800;
+        }
 
+        #drugDiscoveryPage .gemini-answer {
 
-#drugDiscoveryPage .gemini-icon {
+            color: #334155;
 
-    font-size: 26px;
-}
+            font-size: 15px;
 
+            line-height: 1.8;
 
-#drugDiscoveryPage .gemini-result-header strong {
+            white-space: pre-wrap;
 
-    color: #4c1d95;
+            overflow-wrap: anywhere;
+        }
 
-    font-size: 19px;
-}
+        #drugDiscoveryPage .gemini-disclaimer {
 
+            margin-top: 22px;
 
-#drugDiscoveryPage .gemini-source {
+            padding: 13px 15px;
 
-    background: #f0eafe;
+            background: #fff7ed;
 
-    color: #6d28d9;
+            border: 1px solid #fed7aa;
 
-    padding: 7px 11px;
+            border-radius: 10px;
 
-    border-radius: 20px;
+            color: #9a3412;
 
-    font-size: 11px;
+            font-size: 12px;
 
-    font-weight: 800;
-}
+            line-height: 1.6;
+        }
 
+        /* MOBILE */
 
-#drugDiscoveryPage .gemini-answer {
+        @media (max-width: 600px) {
 
-    color: #334155;
+            #drugDiscoveryPage .gemini-search-row {
 
-    font-size: 15px;
+                grid-template-columns: 1fr;
+            }
 
-    line-height: 1.8;
+            #drugDiscoveryPage .gemini-input {
 
-    white-space: pre-wrap;
+                height: 52px;
+            }
 
-    overflow-wrap: anywhere;
-}
+            #drugDiscoveryPage .gemini-result-header {
 
+                align-items: flex-start;
 
-#drugDiscoveryPage .gemini-disclaimer {
+                flex-direction: column;
+            }
 
-    margin-top: 22px;
-
-    padding: 13px 15px;
-
-    background: #fff7ed;
-
-    border: 1px solid #fed7aa;
-
-    border-radius: 10px;
-
-    color: #9a3412;
-
-    font-size: 12px;
-
-    line-height: 1.6;
-}
-
-
-/* MOBILE */
-
-@media (max-width: 600px) {
-
-    #drugDiscoveryPage .gemini-search-row {
-
-        grid-template-columns: 1fr;
-    }
-
-    #drugDiscoveryPage .gemini-input {
-
-        height: 52px;
-    }
-
-    #drugDiscoveryPage .gemini-result-header {
-
-        align-items: flex-start;
-
-        flex-direction: column;
-    }
-
-}
+        }
 
     </style>
 
 </head>
-
 
 <body>
 
@@ -912,13 +877,11 @@
 
     <div class="drug-container">
 
-
         <!-- BACK -->
 
         <a href="/" class="drug-back">
             ← Back to Dashboard
         </a>
-
 
         <!-- HEADER -->
 
@@ -939,157 +902,144 @@
 
         </section>
 
+        <!-- =====================================================
+             GROQ AI DRUG DISCOVERY ASSISTANT
+        ===================================================== -->
 
-       <!-- =====================================================
-     GEMINI DRUG DISCOVERY ASSISTANT
-===================================================== -->
+        <section class="drug-search-panel">
 
-<section class="drug-search-panel">
+            <label class="drug-label">
+                🤖 Ask AI About Drug Discovery
+            </label>
 
-    <label class="drug-label">
-        🤖 Ask AI About Drug Discovery
-    </label>
+            <p class="drug-helper-text">
+                Enter a disease, medicine, molecular target,
+                compound or any pharmaceutical research question.
+            </p>
 
-    <p class="drug-helper-text">
-        Enter a disease, medicine, molecular target,
-        compound or any pharmaceutical research question.
-    </p>
+            <div class="gemini-search-row">
 
+                <input
+                    type="text"
+                    id="geminiQuery"
+                    class="gemini-input"
+                    placeholder="e.g. EGFR inhibitors for lung cancer"
+                    autocomplete="off"
+                >
 
-    <div class="gemini-search-row">
+                <button
+                    type="button"
+                    class="drug-button"
+                    onclick="askGemini()">
 
-        <input
-            type="text"
-            id="geminiQuery"
-            class="gemini-input"
-            placeholder="e.g. EGFR inhibitors for lung cancer"
-            autocomplete="off"
-        >
+                    🤖 Ask AI
 
+                </button>
 
-        <button
-            type="button"
-            class="drug-button"
-            onclick="askGemini()">
+            </div>
 
-            🤖 Ask Gemini
+            <div class="example-queries">
 
-        </button>
+                <button
+                    type="button"
+                    onclick="setQuery('What are common EGFR inhibitors used in cancer research?')">
 
-    </div>
+                    EGFR inhibitors
 
+                </button>
 
-    <div class="example-queries">
+                <button
+                    type="button"
+                    onclick="setQuery('Explain drug discovery for diabetes treatment')">
 
-        <button
-            type="button"
-            onclick="setQuery('What are common EGFR inhibitors used in cancer research?')">
+                    Diabetes drugs
 
-            EGFR inhibitors
+                </button>
 
-        </button>
+                <button
+                    type="button"
+                    onclick="setQuery('Explain the mechanism of action of metformin')">
 
+                    Metformin
 
-        <button
-            type="button"
-            onclick="setQuery('Explain drug discovery for diabetes treatment')">
+                </button>
 
-            Diabetes drugs
+                <button
+                    type="button"
+                    onclick="setQuery('What is the role of acetylcholinesterase in Alzheimer drug discovery?')">
 
-        </button>
+                    Alzheimer target
 
+                </button>
 
-        <button
-            type="button"
-            onclick="setQuery('Explain the mechanism of action of metformin')">
+            </div>
 
-            Metformin
+        </section>
 
-        </button>
+        <!-- =====================================================
+             GROQ LOADING
+        ===================================================== -->
 
+        <div
+            id="geminiLoading"
+            class="gemini-loading">
 
-        <button
-            type="button"
-            onclick="setQuery('What is the role of acetylcholinesterase in Alzheimer drug discovery?')">
-
-            Alzheimer target
-
-        </button>
-
-    </div>
-
-</section>
-
-
-<!-- =====================================================
-     GEMINI LOADING
-===================================================== -->
-
-<div
-    id="geminiLoading"
-    class="gemini-loading">
-
-    🤖 Gemini is analyzing your pharmaceutical query...
-
-</div>
-
-
-<!-- =====================================================
-     GEMINI ERROR
-===================================================== -->
-
-<div
-    id="geminiError"
-    class="gemini-error">
-</div>
-
-
-<!-- =====================================================
-     GEMINI RESULT
-===================================================== -->
-
-<section
-    id="geminiResult"
-    class="gemini-result">
-
-    <div class="gemini-result-header">
-
-        <div>
-
-            <span class="gemini-icon">
-                🤖
-            </span>
-
-            <strong>
-                Gemini AI Analysis
-            </strong>
+            🤖 AI is analyzing your pharmaceutical query...
 
         </div>
 
-        <span class="gemini-source">
-            Google Gemini
-        </span>
+        <!-- =====================================================
+             GROQ ERROR
+        ===================================================== -->
 
-    </div>
+        <div
+            id="geminiError"
+            class="gemini-error">
+        </div>
 
+        <!-- =====================================================
+             GROQ RESULT
+        ===================================================== -->
 
-    <div
-        id="geminiAnswer"
-        class="gemini-answer">
-    </div>
+        <section
+            id="geminiResult"
+            class="gemini-result">
 
+            <div class="gemini-result-header">
 
-    <div class="gemini-disclaimer">
+                <div>
 
-        ⚠️ Educational information only.
-        This system is a demonstration project and
-        should not be used for diagnosis or treatment
-        decisions.
+                    <span class="gemini-icon">
+                        🤖
+                    </span>
 
-    </div>
+                    <strong>
+                        AI Analysis
+                    </strong>
 
-</section>
+                </div>
 
+                <span class="gemini-source">
+                    Groq AI
+                </span>
+
+            </div>
+
+            <div
+                id="geminiAnswer"
+                class="gemini-answer">
+            </div>
+
+            <div class="gemini-disclaimer">
+
+                ⚠️ Educational information only.
+                This system is a demonstration project and
+                should not be used for diagnosis or treatment
+                decisions.
+
+            </div>
+
+        </section>
 
         <!-- LOADING -->
 
@@ -1099,11 +1049,9 @@
 
         </div>
 
-
         <!-- ERROR -->
 
         <div id="drugError"></div>
-
 
         <!-- RESULTS TITLE -->
 
@@ -1125,22 +1073,18 @@
 
         </div>
 
-
         <!-- RESULTS -->
 
         <div id="candidateResults"></div>
-
 
     </div>
 
 </div>
 
-
 <script>
 
-
 /* =========================================================
-   GEMINI DRUG DISCOVERY ASSISTANT
+   GROQ AI DRUG DISCOVERY ASSISTANT
 ========================================================= */
 
 
@@ -1158,7 +1102,7 @@ function setQuery(query) {
 
 
 /* ---------------------------------------------------------
-   ASK GEMINI
+   ASK AI
 --------------------------------------------------------- */
 
 async function askGemini() {
@@ -1232,12 +1176,12 @@ async function askGemini() {
     try {
 
         /* -------------------------------------------------
-           GEMINI API
+           GROQ AI API
         ------------------------------------------------- */
 
         const response =
             await fetch(
-                "/api/gemini-drug",
+                "/api/ai-drug",
                 {
 
                     method: "POST",
@@ -1272,7 +1216,7 @@ async function askGemini() {
             throw new Error(
 
                 data.error ||
-                "Gemini request failed."
+                "AI request failed."
 
             );
 
@@ -1309,7 +1253,7 @@ async function askGemini() {
     catch (err) {
 
         console.error(
-            "Gemini Error:",
+            "AI Error:",
             err
         );
 
