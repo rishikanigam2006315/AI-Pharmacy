@@ -1,4 +1,8 @@
 from flask import Flask, render_template, request, jsonify
+
+from dotenv import load_dotenv
+
+load_dotenv()
 import sqlite3
 import json
 from datetime import datetime
