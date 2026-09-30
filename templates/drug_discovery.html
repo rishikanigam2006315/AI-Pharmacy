@@ -603,6 +603,303 @@
             }
 
         }
+        /* =========================================================
+   GEMINI AI SEARCH
+========================================================= */
+
+#drugDiscoveryPage .drug-helper-text {
+
+    margin: -4px 0 18px;
+
+    color: #64748b;
+
+    font-size: 14px;
+
+    line-height: 1.6;
+}
+
+
+#drugDiscoveryPage .gemini-search-row {
+
+    display: grid;
+
+    grid-template-columns:
+        minmax(0, 1fr)
+        auto;
+
+    gap: 12px;
+
+    width: 100%;
+}
+
+
+#drugDiscoveryPage .gemini-input {
+
+    width: 100%;
+
+    height: 56px;
+
+    padding: 0 18px;
+
+    border: 1px solid #d8dee9;
+
+    border-radius: 12px;
+
+    background: #111827;
+
+    color: white;
+
+    font-size: 16px;
+
+    outline: none;
+
+    transition: 0.2s ease;
+}
+
+
+#drugDiscoveryPage .gemini-input::placeholder {
+
+    color: #94a3b8;
+}
+
+
+#drugDiscoveryPage .gemini-input:focus {
+
+    border-color: #7c3aed;
+
+    box-shadow:
+        0 0 0 3px rgba(124,58,237,0.12);
+}
+
+
+/* EXAMPLE QUESTIONS */
+
+#drugDiscoveryPage .example-queries {
+
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 8px;
+
+    margin-top: 14px;
+}
+
+
+#drugDiscoveryPage .example-queries button {
+
+    border: 1px solid #ddd6fe;
+
+    background: #f5f3ff;
+
+    color: #6d28d9;
+
+    border-radius: 20px;
+
+    padding: 8px 13px;
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition: 0.2s ease;
+}
+
+
+#drugDiscoveryPage .example-queries button:hover {
+
+    background: #ede9fe;
+
+    transform: translateY(-1px);
+}
+
+
+/* GEMINI LOADING */
+
+#drugDiscoveryPage .gemini-loading {
+
+    display: none;
+
+    background: white;
+
+    border-radius: 14px;
+
+    padding: 18px;
+
+    margin-bottom: 22px;
+
+    text-align: center;
+
+    color: #6d28d9;
+
+    font-weight: 700;
+
+    box-shadow:
+        0 8px 25px rgba(15,23,42,0.07);
+}
+
+
+/* GEMINI ERROR */
+
+#drugDiscoveryPage .gemini-error {
+
+    display: none;
+
+    background: #fef2f2;
+
+    border: 1px solid #fecaca;
+
+    color: #b91c1c;
+
+    padding: 15px 18px;
+
+    border-radius: 12px;
+
+    margin-bottom: 22px;
+
+    font-weight: 600;
+}
+
+
+/* GEMINI RESULT */
+
+#drugDiscoveryPage .gemini-result {
+
+    display: none;
+
+    background: white;
+
+    border-radius: 20px;
+
+    padding: 24px;
+
+    margin-bottom: 28px;
+
+    border: 1px solid #e5e7eb;
+
+    border-left: 5px solid #7c3aed;
+
+    box-shadow:
+        0 10px 30px rgba(15,23,42,0.08);
+}
+
+
+#drugDiscoveryPage .gemini-result-header {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 15px;
+
+    margin-bottom: 20px;
+
+    padding-bottom: 15px;
+
+    border-bottom: 1px solid #eef2f7;
+}
+
+
+#drugDiscoveryPage .gemini-result-header > div {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+}
+
+
+#drugDiscoveryPage .gemini-icon {
+
+    font-size: 26px;
+}
+
+
+#drugDiscoveryPage .gemini-result-header strong {
+
+    color: #4c1d95;
+
+    font-size: 19px;
+}
+
+
+#drugDiscoveryPage .gemini-source {
+
+    background: #f0eafe;
+
+    color: #6d28d9;
+
+    padding: 7px 11px;
+
+    border-radius: 20px;
+
+    font-size: 11px;
+
+    font-weight: 800;
+}
+
+
+#drugDiscoveryPage .gemini-answer {
+
+    color: #334155;
+
+    font-size: 15px;
+
+    line-height: 1.8;
+
+    white-space: pre-wrap;
+
+    overflow-wrap: anywhere;
+}
+
+
+#drugDiscoveryPage .gemini-disclaimer {
+
+    margin-top: 22px;
+
+    padding: 13px 15px;
+
+    background: #fff7ed;
+
+    border: 1px solid #fed7aa;
+
+    border-radius: 10px;
+
+    color: #9a3412;
+
+    font-size: 12px;
+
+    line-height: 1.6;
+}
+
+
+/* MOBILE */
+
+@media (max-width: 600px) {
+
+    #drugDiscoveryPage .gemini-search-row {
+
+        grid-template-columns: 1fr;
+    }
+
+    #drugDiscoveryPage .gemini-input {
+
+        height: 52px;
+    }
+
+    #drugDiscoveryPage .gemini-result-header {
+
+        align-items: flex-start;
+
+        flex-direction: column;
+    }
+
+}
 
     </style>
 
@@ -643,67 +940,155 @@
         </section>
 
 
-        <!-- SEARCH -->
+       <!-- =====================================================
+     GEMINI DRUG DISCOVERY ASSISTANT
+===================================================== -->
 
-        <section class="drug-search-panel">
+<section class="drug-search-panel">
 
-            <label class="drug-label">
-                Select Disease & Target
-            </label>
+    <label class="drug-label">
+        🤖 Ask AI About Drug Discovery
+    </label>
 
-
-            <div class="drug-search-row">
-
-
-                <!-- DISEASE -->
-
-                <select
-                    id="disease"
-                    class="drug-select"
-                    onchange="updateTargets()">
-
-                    <option value="Cancer">
-                        Cancer
-                    </option>
-
-                    <option value="Diabetes">
-                        Diabetes
-                    </option>
-
-                    <option value="Alzheimer">
-                        Alzheimer's Disease
-                    </option>
-
-                    <option value="Hypertension">
-                        Hypertension
-                    </option>
-
-                </select>
+    <p class="drug-helper-text">
+        Enter a disease, medicine, molecular target,
+        compound or any pharmaceutical research question.
+    </p>
 
 
-                <!-- TARGET -->
+    <div class="gemini-search-row">
 
-                <select
-                    id="target"
-                    class="drug-select">
+        <input
+            type="text"
+            id="geminiQuery"
+            class="gemini-input"
+            placeholder="e.g. EGFR inhibitors for lung cancer"
+            autocomplete="off"
+        >
 
-                </select>
+
+        <button
+            type="button"
+            class="drug-button"
+            onclick="askGemini()">
+
+            🤖 Ask Gemini
+
+        </button>
+
+    </div>
 
 
-                <!-- BUTTON -->
+    <div class="example-queries">
 
-                <button
-                    type="button"
-                    class="drug-button"
-                    onclick="screenDrugs()">
+        <button
+            type="button"
+            onclick="setQuery('What are common EGFR inhibitors used in cancer research?')">
 
-                    🧬 Screen Candidates
+            EGFR inhibitors
 
-                </button>
+        </button>
 
-            </div>
 
-        </section>
+        <button
+            type="button"
+            onclick="setQuery('Explain drug discovery for diabetes treatment')">
+
+            Diabetes drugs
+
+        </button>
+
+
+        <button
+            type="button"
+            onclick="setQuery('Explain the mechanism of action of metformin')">
+
+            Metformin
+
+        </button>
+
+
+        <button
+            type="button"
+            onclick="setQuery('What is the role of acetylcholinesterase in Alzheimer drug discovery?')">
+
+            Alzheimer target
+
+        </button>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     GEMINI LOADING
+===================================================== -->
+
+<div
+    id="geminiLoading"
+    class="gemini-loading">
+
+    🤖 Gemini is analyzing your pharmaceutical query...
+
+</div>
+
+
+<!-- =====================================================
+     GEMINI ERROR
+===================================================== -->
+
+<div
+    id="geminiError"
+    class="gemini-error">
+</div>
+
+
+<!-- =====================================================
+     GEMINI RESULT
+===================================================== -->
+
+<section
+    id="geminiResult"
+    class="gemini-result">
+
+    <div class="gemini-result-header">
+
+        <div>
+
+            <span class="gemini-icon">
+                🤖
+            </span>
+
+            <strong>
+                Gemini AI Analysis
+            </strong>
+
+        </div>
+
+        <span class="gemini-source">
+            Google Gemini
+        </span>
+
+    </div>
+
+
+    <div
+        id="geminiAnswer"
+        class="gemini-answer">
+    </div>
+
+
+    <div class="gemini-disclaimer">
+
+        ⚠️ Educational information only.
+        This system is a demonstration project and
+        should not be used for diagnosis or treatment
+        decisions.
+
+    </div>
+
+</section>
 
 
         <!-- LOADING -->
@@ -755,173 +1140,81 @@
 
 
 /* =========================================================
-   DISEASE → TARGET MAPPING
+   GEMINI DRUG DISCOVERY ASSISTANT
 ========================================================= */
 
-const targetMap = {
 
-    Cancer: [
+/* ---------------------------------------------------------
+   SET EXAMPLE QUERY
+--------------------------------------------------------- */
 
-        {
-            value: "EGFR",
-            label: "EGFR"
-        },
+function setQuery(query) {
 
-        {
-            value: "HER2",
-            label: "HER2"
-        },
-
-        {
-            value: "VEGFR",
-            label: "VEGFR"
-        }
-
-    ],
-
-
-    Diabetes: [
-
-        {
-            value: "DPP-4",
-            label: "DPP-4"
-        },
-
-        {
-            value: "PPAR-gamma",
-            label: "PPAR-γ"
-        },
-
-        {
-            value: "Sulfonylurea receptor",
-            label: "Sulfonylurea receptor"
-        }
-
-    ],
-
-
-    Alzheimer: [
-
-        {
-            value: "Acetylcholinesterase",
-            label: "Acetylcholinesterase"
-        },
-
-        {
-            value: "NMDA receptor",
-            label: "NMDA receptor"
-        },
-
-        {
-            value: "Muscarinic receptor",
-            label: "Muscarinic receptor"
-        }
-
-    ],
-
-
-    Hypertension: [
-
-        {
-            value: "ACE",
-            label: "ACE"
-        },
-
-        {
-            value: "Angiotensin II receptor",
-            label: "Angiotensin II receptor"
-        },
-
-        {
-            value: "Calcium channel",
-            label: "Calcium channel"
-        }
-
-    ]
-
-};
-
-
-/* =========================================================
-   UPDATE TARGET DROPDOWN
-========================================================= */
-
-function updateTargets() {
-
-    const disease =
-        document.getElementById("disease").value;
-
-    const target =
-        document.getElementById("target");
-
-    target.innerHTML = "";
-
-    const targets =
-        targetMap[disease] || [];
-
-
-    targets.forEach(function(item) {
-
-        const option =
-            document.createElement("option");
-
-        option.value =
-            item.value;
-
-        option.textContent =
-            item.label;
-
-        target.appendChild(option);
-
-    });
+    document.getElementById(
+        "geminiQuery"
+    ).value = query;
 
 }
 
 
-/* Load targets when page opens */
+/* ---------------------------------------------------------
+   ASK GEMINI
+--------------------------------------------------------- */
 
-updateTargets();
+async function askGemini() {
 
+    const input =
+        document.getElementById(
+            "geminiQuery"
+        );
 
-/* =========================================================
-   SCREEN DRUGS
-========================================================= */
+    const query =
+        input.value.trim();
 
-async function screenDrugs() {
-
-    const disease =
-        document.getElementById("disease").value;
-
-    const target =
-        document.getElementById("target").value;
 
     const loading =
-        document.getElementById("drugLoading");
+        document.getElementById(
+            "geminiLoading"
+        );
 
     const error =
-        document.getElementById("drugError");
+        document.getElementById(
+            "geminiError"
+        );
 
-    const results =
-        document.getElementById("candidateResults");
+    const result =
+        document.getElementById(
+            "geminiResult"
+        );
 
-    const heading =
-        document.getElementById("resultsHeading");
+    const answer =
+        document.getElementById(
+            "geminiAnswer"
+        );
 
 
-    /* Validation */
+    /* -----------------------------------------------------
+       VALIDATION
+    ----------------------------------------------------- */
 
-    if (!disease || !target) {
+    if (!query) {
 
         error.innerText =
-            "❌ Please select disease and target.";
+            "❌ Please enter a pharmaceutical question.";
 
         error.style.display =
             "block";
 
-        return;
+        result.style.display =
+            "none";
 
+        return;
     }
 
+
+    /* -----------------------------------------------------
+       UI STATE
+    ----------------------------------------------------- */
 
     loading.style.display =
         "block";
@@ -929,31 +1222,36 @@ async function screenDrugs() {
     error.style.display =
         "none";
 
-    heading.style.display =
+    result.style.display =
         "none";
 
-    results.innerHTML =
+    answer.innerText =
         "";
 
 
     try {
 
+        /* -------------------------------------------------
+           GEMINI API
+        ------------------------------------------------- */
+
         const response =
             await fetch(
-                "/api/screen-drugs",
+                "/api/gemini-drug",
                 {
+
                     method: "POST",
 
                     headers: {
+
                         "Content-Type":
                             "application/json"
+
                     },
 
                     body: JSON.stringify({
 
-                        disease: disease,
-
-                        target: target
+                        query: query
 
                     })
 
@@ -965,27 +1263,60 @@ async function screenDrugs() {
             await response.json();
 
 
+        /* -------------------------------------------------
+           ERROR
+        ------------------------------------------------- */
+
         if (!response.ok) {
 
             throw new Error(
+
                 data.error ||
-                "Unable to fetch drug data."
+                "Gemini request failed."
+
             );
 
         }
 
 
-        displayCandidates(data);
+        /* -------------------------------------------------
+           SHOW ANSWER
+        ------------------------------------------------- */
+
+        answer.innerText =
+            data.answer ||
+            "No answer received.";
+
+
+        result.style.display =
+            "block";
+
+
+        /* Scroll result into view */
+
+        result.scrollIntoView({
+
+            behavior: "smooth",
+
+            block: "start"
+
+        });
+
 
     }
 
 
     catch (err) {
 
-        console.error(err);
+        console.error(
+            "Gemini Error:",
+            err
+        );
+
 
         error.innerText =
             "❌ " + err.message;
+
 
         error.style.display =
             "block";
@@ -1003,205 +1334,28 @@ async function screenDrugs() {
 }
 
 
-/* =========================================================
-   DISPLAY RESULTS
-========================================================= */
+/* ---------------------------------------------------------
+   ENTER KEY SUPPORT
+--------------------------------------------------------- */
 
-function displayCandidates(data) {
+document
+    .getElementById("geminiQuery")
+    .addEventListener(
+        "keydown",
+        function(event) {
 
-    const container =
-        document.getElementById(
-            "candidateResults"
-        );
+            if (
+                event.key === "Enter"
+            ) {
 
-    const heading =
-        document.getElementById(
-            "resultsHeading"
-        );
+                event.preventDefault();
 
-    const count =
-        document.getElementById(
-            "resultsCount"
-        );
+                askGemini();
 
-
-    container.innerHTML =
-        "";
-
-
-    if (
-        !data.candidates ||
-        data.candidates.length === 0
-    ) {
-
-        container.innerHTML = `
-
-            <div class="drug-empty">
-
-                No compounds found for this disease.
-
-            </div>
-
-        `;
-
-        return;
-
-    }
-
-
-    heading.style.display =
-        "flex";
-
-
-    count.innerText =
-        `${data.candidates.length} candidate${
-            data.candidates.length !== 1
-                ? "s"
-                : ""
-        }`;
-
-
-    data.candidates.forEach(
-        function(candidate) {
-
-            const card =
-                document.createElement(
-                    "article"
-                );
-
-
-            card.className =
-                "drug-card";
-
-
-            card.innerHTML = `
-
-                <div class="drug-card-top">
-
-                    <h3 class="drug-name">
-
-                        🧬 ${candidate.name}
-
-                    </h3>
-
-
-                    <span class="pubchem-badge">
-
-                        🧪 PubChem
-
-                    </span>
-
-                </div>
-
-
-                <div class="drug-info-grid">
-
-
-                    <div class="drug-info-box">
-
-                        <span class="drug-info-label">
-
-                            PubChem CID
-
-                        </span>
-
-
-                        <span class="drug-info-value">
-
-                            ${candidate.cid || "N/A"}
-
-                        </span>
-
-                    </div>
-
-
-                    <div class="drug-info-box">
-
-                        <span class="drug-info-label">
-
-                            Molecular Formula
-
-                        </span>
-
-
-                        <span class="drug-info-value">
-
-                            ${candidate.formula || "N/A"}
-
-                        </span>
-
-                    </div>
-
-
-                    <div class="drug-info-box">
-
-                        <span class="drug-info-label">
-
-                            Molecular Weight
-
-                        </span>
-
-
-                        <span class="drug-info-value">
-
-                            ${candidate.molecular_weight || "N/A"}
-
-                            g/mol
-
-                        </span>
-
-                    </div>
-
-
-                    <div class="drug-info-box">
-
-                        <span class="drug-info-label">
-
-                            Target
-
-                        </span>
-
-
-                        <span class="drug-info-value">
-
-                            ${candidate.target || "N/A"}
-
-                        </span>
-
-                    </div>
-
-
-                </div>
-
-
-                <div class="smiles-section">
-
-                    <span class="smiles-title">
-
-                        Molecular Structure / SMILES
-
-                    </span>
-
-
-                    <div class="smiles-box">
-
-                        ${candidate.smiles || "N/A"}
-
-                    </div>
-
-                </div>
-
-            `;
-
-
-            container.appendChild(
-                card
-            );
+            }
 
         }
     );
-
-}
 
 </script>
 

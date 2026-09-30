@@ -3,12 +3,14 @@ import sqlite3
 import json
 from datetime import datetime
 from pathlib import Path
+import os
 
 import cv2
 import numpy as np
 import base64
 import tensorflow as tf
 import requests
+from google import genai
 
 app = Flask(__name__)
 
@@ -320,6 +322,126 @@ def screen_drugs():
             "error": str(e)
 
         }), 500
+
+
+# =========================================================
+# GEMINI AI DRUG DISCOVERY ASSISTANT
+# =========================================================
+
+@app.route("/api/gemini-drug", methods=["POST"])
+def gemini_drug():
+
+    try:
+
+        data = request.get_json() or {}
+        user_query = data.get("query", "").strip()
+
+        if not user_query:
+            return jsonify({
+                "success": False,
+                "error": "Please enter your question."
+            }), 400
+
+        api_key = os.getenv("GEMINI_API_KEY")
+
+        if not api_key:
+            return jsonify({
+                "success": False,
+                "error": "Gemini API key is not configured. Set GEMINI_API_KEY first."
+            }), 500
+
+        client = genai.Client(api_key=api_key)
+
+        prompt = f"""
+You are the AI assistant inside an educational exhibition project
+called "AI Pharmacy".
+
+The user is asking about drug discovery, pharmaceutical compounds,
+molecular targets, diseases, drug mechanisms, medicinal chemistry,
+or related pharmaceutical research.
+
+User question:
+{user_query}
+
+Give a clear, structured educational answer.
+
+When relevant, explain:
+1. Disease or condition
+2. Molecular target
+3. Drug/compound examples
+4. Mechanism of action
+5. Important molecular information
+6. Drug-discovery relevance
+
+Do not claim that you discovered a new drug.
+Do not provide personalized medical advice or treatment instructions.
+Do not tell a specific patient which medicine to take.
+
+If the answer involves factual drug information, make it clear that
+the information should be verified against authoritative sources
+such as PubChem, FDA labeling, or professional medical references.
+"""
+
+        # Gemini can temporarily return 503 UNAVAILABLE during
+        # periods of high demand. Try stable Flash models in order.
+        models = [
+            "gemini-3.8-flash",
+            "gemini-3.7-flash",
+            "gemini-3.6-flash",
+            "gemini-3.5-flash"
+        ]
+
+        response = None
+        last_error = None
+
+        for model_name in models:
+            try:
+                print(f"Trying Gemini model: {model_name}")
+
+                response = client.models.generate_content(
+                    model=model_name,
+                    contents=prompt
+                )
+
+                print(f"Gemini response received from: {model_name}")
+                break
+
+            except Exception as e:
+                last_error = e
+                print(f"Gemini model failed: {model_name} -> {e}")
+
+        if response is None:
+            raise Exception(
+                "All configured Gemini models are currently unavailable. "
+                f"Last error: {last_error}"
+            )
+
+        answer = getattr(response, "text", None)
+
+        if not answer:
+            answer = "Gemini did not return a text response."
+
+        add_history("Drug Discovery", "GEMINI_QUERY", {
+            "query": user_query,
+            "source": "Google Gemini"
+        })
+
+        return jsonify({
+            "success": True,
+            "query": user_query,
+            "answer": answer,
+            "source": "Google Gemini"
+        })
+
+    except Exception as e:
+
+        print("GEMINI ERROR:", e)
+
+        return jsonify({
+            "success": False,
+            "error": str(e)
+        }), 500
+
 
 # =========================================================
 # TABLET AI PREDICTION
