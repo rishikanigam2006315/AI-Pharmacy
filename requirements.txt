@@ -1,0 +1,9 @@
+Flask
+gunicorn
+python-dotenv
+groq
+requests
+numpy
+opencv-python-headless
+tensorflow
+Pillow
